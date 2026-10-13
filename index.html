@@ -797,7 +797,7 @@ let mem = null;
 function seed() {
   const t = iso(today0());
   return {
-    v: 1, tab: 'hoy',
+    v: 1, tab: 'hoy', born: t,
     plants: [
       { uid: 'p' + uid(), cat: 'limonero', nick: 'Limonero del mercado', added: t, stage: 'plantada', potL: null, place: 'Al sol', note: 'Mide unos 1,40 m. Aún sin trasplantar.', mult: 1, log: [] },
       { uid: 'p' + uid(), cat: 'cayena', nick: 'Guindilla cayena', added: t, stage: 'plantada', potL: null, place: 'Al sol', note: '', mult: 1, log: [] },
@@ -1042,6 +1042,7 @@ function vHoy() {
     }).join('') + '</div>';
   }
   if (season_.length) h += '<div class="sec-title"><h2>En temporada</h2></div><div class="row wrap">' + season_.slice(0, 12).map(s => '<span class="chip">' + esc(s) + '</span>').join('') + '</div>';
+  h += backupNudge();
   h += '<p class="small muted" style="margin-top:20px">Las tareas «recomendadas» salen de las pautas de cada planta y de tu registro. Los recordatorios que creas tú llevan la etiqueta «Mío».</p>';
   return h;
 }
@@ -1277,8 +1278,37 @@ function vBuy() {
 function buyCard(t, rows) {
   return '<div class="card"><h3>' + t + '</h3>' + rows.map(r => '<div style="margin-top:10px"><b>' + esc(r[0]) + '</b><div class="small muted">' + esc(r[1]) + '</div><a class="small" href="' + esc(r[2]) + '" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">' + esc(r[2].replace(/^https?:\/\//, '').replace(/^www\./, '').slice(0, 56)) + '</a></div>').join('') + '</div>';
 }
+function backupAge() {
+  if (S.lastBackup) return { n: diff(parse(S.lastBackup), today0()), had: true };
+  const ds = S.plants.map(p => p.added).filter(Boolean).sort();
+  const base = S.born || ds[0] || iso(today0());
+  return { n: diff(parse(base), today0()), had: false };
+}
 function vData() {
-  return '<div class="top"><h1>Copia de seguridad</h1></div><div class="card stack"><p class="small">Tus datos viven solo en este navegador. Si cambias de móvil o borras los datos del navegador, se pierden. Guarda una copia de vez en cuando.</p><div class="row wrap"><button class="btn" data-act="export">Exportar</button><button class="btn sec" data-act="import">Importar</button><button class="btn ghost danger" style="color:var(--warn)" data-act="reset">Empezar de cero</button></div></div>';
+  const a = backupAge();
+  const last = S.lastBackup ? 'Última copia: ' + fmtShort(S.lastBackup) + ' (' + rel(-a.n) + ').' : 'Todavía no has guardado ninguna copia.';
+  return '<div class="top"><h1>Copia de seguridad</h1></div><div class="card stack"><p class="small">Tus datos viven solo en este móvil. Si cambias de móvil o borras los datos del navegador, se pierden.</p><p class="small"><b>' + esc(last) + '</b></p><button class="btn" data-act="backup">Guardar copia en el móvil</button><p class="small muted">Se abre el menú de compartir del iPhone: elige «Guardar en Archivos» y una carpeta (iCloud Drive, OneDrive o Google Drive si las tienes en Archivos). El archivo se llama siempre <b>terraza-copia.json</b>: si ya existe, elige «Reemplazar» y no se acumulan copias.</p><div class="row wrap"><button class="btn sec" data-act="export">Copiar como texto</button><button class="btn sec" data-act="import">Importar</button><button class="btn ghost danger" style="color:var(--warn)" data-act="reset">Empezar de cero</button></div></div>';
+}
+function backupNudge() {
+  if (!S.plants.length) return '';
+  const a = backupAge();
+  if (a.n < 30) return '';
+  return '<div class="card" style="margin-top:16px"><p class="small" style="margin-bottom:8px">' + (a.had ? 'Hace ' + a.n + ' días que no guardas una copia de tus datos.' : 'Llevas ' + a.n + ' días usando la app y aún no has guardado una copia de tus datos.') + '</p><button class="btn sm sec" data-act="backup">Guardar copia</button></div>';
+}
+function doBackup() {
+  const today = iso(today0());
+  const text = JSON.stringify(Object.assign({}, S, { lastBackup: today }));
+  const done = () => { S.lastBackup = today; save(); render(); };
+  let file = null;
+  try { file = new File([text], 'terraza-copia.json', { type: 'application/json' }); } catch (e) { /* sin File */ }
+  if (file && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+    navigator.share({ files: [file], title: 'Copia de la terraza' }).then(() => { done(); toast('Copia lista. Comprueba en Archivos que se ha guardado.'); }).catch(e => {
+      if (e && e.name === 'AbortError') return;
+      dataSheet('export'); toast('Tu móvil no permite compartir el archivo; usa «Copiar» o «Descargar archivo».');
+    });
+  } else {
+    dataSheet('export'); toast('Aquí no se puede abrir el menú de compartir; usa «Copiar» o «Descargar archivo».');
+  }
 }
 function vAbout() {
   return '<div class="top"><h1>Fuentes y límites</h1></div><div class="stack">' +
@@ -1402,6 +1432,7 @@ document.addEventListener('click', e => {
     case 'shop-del': S.shop = S.shop.filter(i => i.id !== D.id); save(); render(); break;
     case 'shop-clear': S.shop = S.shop.filter(i => !i.done); save(); render(); break;
     case 'shop-add-cat': { const c = BYID[D.id]; S.shop.push({ id: uid(), t: c.n + ' (' + (c.g === 'picante' ? 'semillas o plantel' : 'planta o semillas') + ')', done: false }); save(); toast('Añadida a la lista de compra.'); break; }
+    case 'backup': doBackup(); break;
     case 'export': dataSheet('export'); break;
     case 'import': dataSheet('import'); break;
     case 'd-copy': copyText($('#d-ta').value, $('#d-ta')); break;
