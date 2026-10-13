@@ -1,0 +1,1478 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0C6A62">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Terraza">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px)}</style>
+<title>Terraza de Huércal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Diseño: app de bolsillo para una terraza encalada del sureste.
+   Fondo cal fría, tinta verde-azulada, acento mar; el color de cada grupo de plantas
+   (cítrico sol, aromática hoja, picante arcilla, suculenta mar) marca todo el app. */
+:root {
+  --bg: #F1F4EF;
+  --surface: #FFFFFF;
+  --surface2: #E6ECE4;
+  --ink: #15262B;
+  --ink2: #50626A;
+  --line: #D3DCD3;
+  --accent: #0C6A62;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #D5EBE6;
+  --sun: #C47F00;
+  --leaf: #3A7A36;
+  --clay: #B3432A;
+  --sea: #2B6CA3;
+  --warn: #B3432A;
+  --ok: #2F7A45;
+  --shadow: 0 1px 2px rgba(21,38,43,.08), 0 6px 18px rgba(21,38,43,.06);
+  --f-display: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  --f-body: 'Figtree', -apple-system, 'Segoe UI', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1819; --surface: #162426; --surface2: #1E3032; --ink: #E5EEEA; --ink2: #9DB2B0;
+    --line: #29403F; --accent: #4FC1B3; --accent-ink: #07201D; --accent-soft: #17413E;
+    --sun: #F0B23A; --leaf: #84C77F; --clay: #E8856A; --sea: #6EB3E8; --warn: #E8856A; --ok: #7FCB92;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1819; --surface: #162426; --surface2: #1E3032; --ink: #E5EEEA; --ink2: #9DB2B0;
+  --line: #29403F; --accent: #4FC1B3; --accent-ink: #07201D; --accent-soft: #17413E;
+  --sun: #F0B23A; --leaf: #84C77F; --clay: #E8856A; --sea: #6EB3E8; --warn: #E8856A; --ok: #7FCB92;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 6px 18px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.45;
+  margin: 0; -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent;
+}
+#app { max-width: 560px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; }
+main { flex: 1; padding: 16px 16px 112px; min-width: 0; }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; line-height: 1.15; text-wrap: balance; }
+h1 { font-size: 30px; font-weight: 700; letter-spacing: -.01em; }
+h2 { font-size: 20px; font-weight: 650; }
+h3 { font-size: 16px; font-weight: 650; }
+p { margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+input, select, textarea { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; width: 100%; min-width: 0; }
+textarea { min-height: 120px; resize: vertical; }
+label { display: block; font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--ink2); margin: 12px 0 4px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.muted { color: var(--ink2); }
+.small { font-size: 13px; }
+.row { display: flex; gap: 8px; align-items: center; min-width: 0; }
+.row.wrap { flex-wrap: wrap; }
+.grow { flex: 1; min-width: 0; }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.stack.s8 { gap: 8px; }
+.sp { height: 8px; }
+
+/* cabecera */
+.top { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.top .kicker { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.back { background: none; border: 0; padding: 6px 0; color: var(--accent); font-weight: 600; display: inline-flex; gap: 4px; align-items: center; }
+
+/* franja de clima */
+.climate { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; box-shadow: var(--shadow); }
+.climate .temps { display: flex; gap: 14px; align-items: baseline; font-variant-numeric: tabular-nums; }
+.climate .big { font-family: var(--f-display); font-weight: 700; font-size: 26px; }
+.climate .lbl { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink2); }
+.tmin { color: var(--sea); } .tmax { color: var(--sun); }
+
+/* tarjetas */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+.card.tap { cursor: pointer; width: 100%; text-align: left; }
+.task { display: grid; grid-template-columns: 6px 1fr auto; gap: 12px; align-items: center; padding: 12px 12px 12px 0; }
+.task .bar { align-self: stretch; border-radius: 0 4px 4px 0; background: var(--gc, var(--accent)); }
+.task .t1 { font-weight: 650; }
+.task .t2 { font-size: 13px; color: var(--ink2); }
+.task.over .t2 .due { color: var(--warn); font-weight: 600; }
+.btn { border: 0; border-radius: 10px; padding: 10px 14px; font-weight: 650; background: var(--accent); color: var(--accent-ink); min-height: 40px; }
+.btn.sec { background: var(--surface2); color: var(--ink); }
+.btn.ghost { background: none; border: 1px solid var(--line); color: var(--ink); }
+.btn.danger { background: var(--warn); color: #fff; }
+.btn.sm { padding: 6px 10px; min-height: 32px; font-size: 13px; }
+.btn.block { width: 100%; }
+.chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--surface2); color: var(--ink); white-space: nowrap; }
+.chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--gc, var(--ink2)); display: inline-block; }
+.chip.on { background: var(--accent); color: var(--accent-ink); }
+.chip.fit3 { background: var(--accent-soft); color: var(--ink); }
+.chip.fit0 { background: color-mix(in srgb, var(--clay) 20%, var(--surface)); }
+button.chip { border: 0; cursor: pointer; min-height: 32px; padding: 4px 12px; }
+.sec-title { display: flex; justify-content: space-between; align-items: baseline; margin: 22px 0 8px; }
+.sec-title h2 { font-size: 17px; }
+.empty { text-align: center; padding: 28px 16px; color: var(--ink2); border: 1px dashed var(--line); border-radius: 14px; }
+.pill-src { font-size: 11px; color: var(--ink2); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; }
+
+/* lista de plantas */
+.card.pcard { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; padding: 12px; }
+.ico { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--gc) 16%, var(--surface)); color: var(--gc); }
+.ico svg { width: 24px; height: 24px; }
+.pcard .nm { font-weight: 650; }
+.pcard .sub { font-size: 13px; color: var(--ink2); }
+.drop { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.drop.late { color: var(--warn); }
+
+/* tira de meses */
+.strip { display: grid; grid-template-columns: 70px repeat(12, 1fr); gap: 2px; align-items: center; font-size: 11px; }
+.strip .nm { color: var(--ink2); }
+.strip .c { height: 18px; border-radius: 4px; background: var(--surface2); display: grid; place-items: center; font-size: 10px; color: var(--ink2); }
+.strip .c.on { background: var(--gc); color: #fff; }
+.strip .c.now { outline: 2px solid var(--ink); outline-offset: 1px; }
+.strip .hd { height: auto; background: none; font-weight: 700; }
+
+/* facts */
+.facts { display: grid; grid-template-columns: 1fr; gap: 0; }
+.fact { display: grid; grid-template-columns: 92px 1fr; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); }
+.fact:first-child { border-top: 0; }
+.fact b { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink2); padding-top: 2px; }
+.wtab { width: 100%; border-collapse: collapse; text-align: center; font-variant-numeric: tabular-nums; }
+.wtab th { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink2); font-weight: 600; padding: 4px; }
+.wtab td { font-family: var(--f-display); font-weight: 650; font-size: 18px; padding: 4px; }
+.wtab td.cur { background: var(--accent-soft); border-radius: 8px; }
+.wtab td small { display: block; white-space: nowrap; font-size: 11px; font-family: var(--f-body); font-weight: 500; color: var(--ink2); }
+ul.plain { margin: 0; padding-left: 18px; }
+ul.plain li { margin: 3px 0; }
+
+/* calendario */
+.cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal .dh { text-align: center; font-size: 11px; color: var(--ink2); font-weight: 600; padding: 2px 0; }
+.cal button.d { aspect-ratio: 1 / 1.05; border-radius: 10px; border: 1px solid transparent; background: var(--surface); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 5px; gap: 3px; font-variant-numeric: tabular-nums; min-width: 0; }
+.cal button.d.out { opacity: .35; }
+.cal button.d.today { border-color: var(--accent); font-weight: 700; }
+.cal button.d.sel { background: var(--accent); color: var(--accent-ink); }
+.cal .dots { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; min-height: 6px; }
+.cal .dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--sea); display: block; }
+.cal .dots i.m { background: var(--accent); }
+.cal .dots i.l { background: var(--ok); }
+.cal button.d.sel .dots i { background: var(--accent-ink); }
+.legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--ink2); }
+.legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+.nav h2 { text-transform: capitalize; }
+
+/* barra inferior */
+.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); padding: 6px 8px calc(6px + env(safe-area-inset-bottom, 0px)); }
+.tabbar .in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
+.tabbar button { background: none; border: 0; padding: 6px 2px; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; font-weight: 600; color: var(--ink2); border-radius: 10px; min-height: 48px; }
+.tabbar button svg { width: 24px; height: 24px; }
+.tabbar button[aria-selected="true"] { color: var(--accent); }
+.tabbar button .badge { position: absolute; transform: translate(14px, -4px); background: var(--clay); color: #fff; border-radius: 999px; font-size: 10px; padding: 0 5px; min-width: 16px; line-height: 16px; }
+.fab { position: fixed; right: max(16px, calc(50% - 280px + 16px)); bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 15; width: 52px; height: 52px; border-radius: 16px; border: 0; background: var(--accent); color: var(--accent-ink); box-shadow: var(--shadow); display: grid; place-items: center; }
+.fab svg { width: 26px; height: 26px; }
+
+/* hojas */
+.scrim { position: fixed; inset: 0; background: rgba(8,16,16,.5); z-index: 40; }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 41; max-height: 92%; overflow: auto; background: var(--bg); border-radius: 20px 20px 0 0; padding: 8px 16px calc(24px + env(safe-area-inset-bottom, 0px)); max-width: 560px; margin: 0 auto; box-shadow: 0 -10px 40px rgba(0,0,0,.25); overscroll-behavior: contain; }
+.sheet .grab { width: 40px; height: 4px; border-radius: 4px; background: var(--line); margin: 4px auto 12px; }
+.sheet .hd { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 10px; }
+.sheet .x { background: var(--surface2); border: 0; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; flex: none; }
+.toast { position: fixed; left: 16px; right: 16px; bottom: calc(80px + env(safe-area-inset-bottom, 0px)); max-width: 528px; margin: 0 auto; z-index: 60; background: var(--ink); color: var(--bg); border-radius: 12px; padding: 12px 14px; display: flex; gap: 12px; align-items: center; justify-content: space-between; box-shadow: var(--shadow); }
+.toast button { background: none; border: 0; color: var(--accent-soft); font-weight: 700; padding: 4px 8px; }
+.opt { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.opt button { text-align: left; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); }
+.opt button b { display: block; }
+.hist { display: grid; grid-template-columns: 78px 1fr auto; gap: 8px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.hist:first-child { border-top: 0; }
+.note { background: color-mix(in srgb, var(--sun) 14%, var(--surface)); border: 1px solid color-mix(in srgb, var(--sun) 40%, var(--line)); border-radius: 12px; padding: 10px 12px; font-size: 14px; }
+.note.warn { background: color-mix(in srgb, var(--clay) 12%, var(--surface)); border-color: color-mix(in srgb, var(--clay) 40%, var(--line)); }
+.menu { display: grid; gap: 8px; }
+.menu button { display: grid; grid-template-columns: 36px 1fr auto; gap: 12px; align-items: center; text-align: left; padding: 12px 14px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+.menu button svg { width: 24px; height: 24px; color: var(--accent); }
+.seg { display: flex; gap: 6px; flex-wrap: wrap; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.shop { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+.shop input[type=checkbox] { width: 22px; height: 22px; padding: 0; accent-color: var(--accent); }
+.done { text-decoration: line-through; color: var(--ink2); }
+@media (prefers-reduced-motion: no-preference) {
+  .sheet { animation: up .22s ease-out; }
+  @keyframes up { from { transform: translateY(24px); opacity: .4; } to { transform: none; opacity: 1; } }
+}
+[hidden] { display: none !important; }
+
+</style>
+</head><body>
+<div id="app"><main id="main" aria-live="polite"></main></div>
+<button class="fab" id="fab" hidden></button>
+<nav class="tabbar" id="tabbar" aria-label="Secciones"></nav>
+<script>
+/* ============================================================
+   CATÁLOGO DE PLANTAS · Huércal de Almería
+   Fuentes y límites:
+   - src:'guia'  → datos ya contrastados en la guía (RHS, BCSS, AEMET, UF/IFAS, MITECO...)
+   - src:'gen'   → pauta de cultivo general; no hay dato publicado para Huércal. Verifícala.
+   - Los intervalos de riego (w) son PUNTO DE PARTIDA orientativo [inv, prim, ver, oto] en días
+     para maceta al sol; la app los ajusta con tu registro.
+   - fit = valoración propia a partir del clima (no es un dato publicado).
+   ============================================================ */
+
+const CLIMA = {
+  // AEMET, Almería Aeropuerto (6325O), normales 1981-2010: [Tmin, Tmax] por mes
+  tmin: [8.3, 9.0, 10.6, 12.5, 15.3, 18.9, 21.7, 22.4, 20.0, 16.3, 12.3, 9.6],
+  tmax: [16.9, 17.6, 19.6, 21.4, 24.1, 27.9, 30.5, 31.0, 28.4, 24.5, 20.5, 17.9],
+  notas: [
+    'Mes más frío. Si la previsión anuncia menos de 7 °C por la noche, cubre cítricos y lima con manto antiheladas.',
+    'Final de invierno: poda ligera de cítricos y siembra de chiles en interior.',
+    'Siembra de chiles en interior; empieza el abonado de cítricos.',
+    'Chiles y albahaca al exterior cuando las noches se estabilicen por encima de 12 °C.',
+    'Calor creciente: sube la frecuencia de riego y vigila la araña roja.',
+    'Entra el calor fuerte. Riega por la mañana temprano; sombra de tarde para hojas tiernas.',
+    'Pleno verano. Riego casi diario en macetas al sol; revisa a diario si hay poniente.',
+    'El mes más cálido. Los chiles pueden soltar flor con más de 35 °C: sombra parcial en las horas centrales.',
+    'Aún calor (mínima media 20 °C). Sigue el riego de verano; empieza a sembrar cilantro, perejil y eneldo.',
+    'Vuelve el clima suave: buen mes para plantar aromáticas de vivero y sembrar hierbas de hoja.',
+    'Baja el riego. Los chiles terminan; protege o resguarda lo sensible al frío.',
+    'Las mínimas bajan de 10 °C. Cuida lo tropical y deja casi secas las suculentas.'
+  ],
+  ref: 'AEMET, Almería Aeropuerto (21 m), normales 1981-2010. Huércal está a unos 8 km, a 69-76 m de altitud: usa estos datos como referencia, no como medida local.'
+};
+
+const GROUPS = {
+  citrico:   { n: 'Cítricos',    c: 'var(--sun)',  ic: 'citrus' },
+  aromatica: { n: 'Aromáticas',  c: 'var(--leaf)', ic: 'leaf' },
+  picante:   { n: 'Picantes',    c: 'var(--clay)', ic: 'chili' },
+  suculenta: { n: 'Suculentas',  c: 'var(--sea)',  ic: 'agave' }
+};
+
+const FIT = {
+  ideal:    { n: 'Encaja muy bien', k: 3 },
+  bueno:    { n: 'Encaja bien', k: 2 },
+  cuidados: { n: 'Pide cuidados', k: 1 },
+  dificil:  { n: 'Difícil aquí', k: 0 }
+};
+
+/* helpers de tareas: k=clave, l=etiqueta, m=meses activos, e=cada N días, x=texto */
+const T = {
+  abono:  (m, e, x, l) => ({ k: 'abono', l: l || 'Abonar', m, e, x }),
+  poda:   (m, e, x, l) => ({ k: 'poda', l: l || 'Podar', m, e: e || 330, x }),
+  plagas: (e, x, m) => ({ k: 'plagas', l: 'Revisar plagas', m: m || null, e, x }),
+  trasp:  (m, e, x) => ({ k: 'trasplante', l: 'Trasplantar', m, e: e || 700, x })
+};
+const ALLM = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+const CAT = [
+/* ------------------------------ CÍTRICOS ------------------------------ */
+{ id: 'limonero', g: 'citrico', n: 'Limonero', s: 'Citrus limon', src: 'guia', fit: 'ideal',
+  fn: 'En Almería Aeropuerto no hay días de helada de media (AEMET). El límite de daño de la RHS es 7 °C: vigila solo noches puntuales por debajo.',
+  sun: 'Pleno sol, mínimo 6 h directas', pot: '40-60 L, diámetro y altura similares, agujeros y calzos',
+  soil: 'Sustrato para cítricos o mezcla ligera y drenante (ej.: 60 % universal, 30 % perlita, 10 % humus)',
+  w: [6, 3, 2, 4], wn: 'Mete el dedo 3-4 cm: si está seco, riega a fondo; si está húmedo, espera. El exceso de riego es la causa más común de hojas amarillas y caída.',
+  t: [T.abono([3, 4, 5, 6, 7, 8, 9], 30, 'Abono formulado para cítricos y dosis del fabricante, nunca más.'),
+      T.poda([2, 3], 330, 'Aclara ramas que se crucen, secas o débiles. No quites más de un tercio de golpe.'),
+      T.plagas(14, 'Mira el envés y las axilas de las ramas: cochinilla, pulgón, hojas con galerías o enrolladas. En verano, araña roja.'),
+      T.trasp([3, 4], 700, 'Maceta nueva solo 10-15 cm más ancha. Primeras 3-4 semanas: sol suave, sin abono fuerte y sin podar.')],
+  h: [], pl: [3, 4],
+  win: [{ l: 'Quitar brotes del patrón', m: [3, 4, 5], x: 'Brotes por debajo de la cicatriz del injerto: córtalos al ras.' }],
+  u: 'Zumo, ralladura (solo la parte amarilla), rodajas, conservas en sal.',
+  c: ['Atar el tronco a un tutor con cinta blanda si hay viento (con 1,40 m).',
+      'Floración casi todo el año, con más intensidad a finales de invierno (RHS).',
+      'Cosecha: cuando el fruto alcanza el tamaño y color de su variedad.',
+      'Noche especialmente fría: manto antiheladas por la tarde y quitarlo por la mañana.'],
+  a: '', b: 'Ya lo tienes (mercado). Para más cítricos: compra en primavera o principios de verano (RHS) en vivero.' },
+
+{ id: 'lima', g: 'citrico', n: 'Lima (Tahití)', s: 'Citrus × latifolia', src: 'guia', fit: 'bueno',
+  fn: 'La lima ácida tiene poca resistencia al frío (la «key» más que la Tahití). Dale el rincón más cálido y resguardado.',
+  sun: 'Pleno sol, junto a un muro que acumule calor', pot: '40-60 L, propia (no junto al limonero)',
+  soil: 'Igual que el limonero', w: [6, 3, 2, 4],
+  wn: 'Igual que el limonero. Sustrato nunca seco del todo ni encharcado.',
+  t: [T.abono([3, 4, 5, 6, 7, 8, 9], 30, 'Abono para cítricos, dosis del fabricante.'),
+      T.poda([2, 3], 330, 'Retoques ligeros a finales de invierno.'),
+      T.plagas(14, 'Cochinilla, pulgón y araña roja en calor.'),
+      T.trasp([3, 4], 700, 'Mismos pasos que el limonero.')],
+  h: [], pl: [3, 4], win: [],
+  u: 'Zumo para cócteles, ceviche, guacamole, cocina tailandesa y mexicana.',
+  c: ['Compra en marzo-abril, no en otoño (la guía sigue la recomendación de la RHS).',
+      'Separa las macetas unos 50 cm para que circule el aire.',
+      'Cúbrela con manto antiheladas antes que al limonero.'],
+  a: '', b: 'Vivero o garden center en primavera. Pregunta variedad y portainjerto.' },
+
+{ id: 'meyer', g: 'citrico', n: 'Limonero Meyer', s: 'Citrus × meyeri', src: 'guia', fit: 'ideal',
+  fn: 'El limonero más resistente al frío y de los pocos recomendados para maceta (Mississippi State University).',
+  sun: 'Pleno sol', pot: '30-50 L', soil: 'Como el limonero', w: [6, 3, 2, 4],
+  wn: 'Como el limonero.',
+  t: [T.abono([3, 4, 5, 6, 7, 8, 9], 30, 'Abono para cítricos.'), T.poda([2, 3], 330, 'Aclarado ligero.'), T.plagas(14, 'Cochinilla, pulgón, araña roja.')],
+  h: [], pl: [3, 4], win: [],
+  u: 'Zumo más dulce y menos ácido que el limón común; repostería.',
+  c: ['Híbrido de limón con mandarina o naranja.'], a: '', b: 'Vivero en primavera.' },
+
+{ id: 'kumquat', g: 'citrico', n: 'Kumquat', s: 'Fortunella margarita', src: 'guia', fit: 'ideal',
+  fn: 'Muy compacto y de los cítricos más tolerantes al frío (hasta unos −9 °C en campo, UF/IFAS; en maceta, menos).',
+  sun: 'Pleno sol', pot: '20-40 L', soil: 'Como el limonero', w: [6, 3, 2, 4], wn: 'Como el limonero.',
+  t: [T.abono([3, 4, 5, 6, 7, 8, 9], 30, 'Abono para cítricos.'), T.poda([2, 3], 330, 'Aclarado ligero.'), T.plagas(14, 'Cochinilla, pulgón.')],
+  h: [], pl: [3, 4], win: [],
+  u: 'Se come entero con piel; mermeladas, licores, ensaladas, guarnición de platos salados.',
+  c: ['Fruto pequeño; ideal en macetas pequeñas.'], a: '', b: 'Vivero en primavera.' },
+
+{ id: 'calamondin', g: 'citrico', n: 'Calamondín', s: 'Citrofortunella microcarpa', src: 'guia', fit: 'bueno',
+  fn: 'Pequeño y decorativo; aguanta unos −6 °C en campo (UF/IFAS). Florece casi todo el año y el fruto tarda casi un año en madurar.',
+  sun: 'Pleno sol', pot: '15-30 L', soil: 'Como el limonero', w: [6, 3, 2, 4], wn: 'Como el limonero.',
+  t: [T.abono([3, 4, 5, 6, 7, 8, 9], 30, 'Abono para cítricos.'), T.poda([2, 3], 330, 'Aclarado ligero.'), T.plagas(14, 'Cochinilla, pulgón.')],
+  h: [], pl: [3, 4], win: [],
+  u: 'Fruto ácido que se usa como limón o lima: zumo, adobos, cocina filipina.',
+  c: [], a: '', b: 'Vivero en primavera.' },
+
+{ id: 'limequat', g: 'citrico', n: 'Limequat', s: 'Citrus × floridana', src: 'guia', fit: 'bueno',
+  fn: 'Cruce de lima y kumquat; más resistente al frío que la lima y de uso parecido.',
+  sun: 'Pleno sol', pot: '30-40 L', soil: 'Como el limonero', w: [6, 3, 2, 4], wn: 'Como el limonero.',
+  t: [T.abono([3, 4, 5, 6, 7, 8, 9], 30, 'Abono para cítricos.'), T.poda([2, 3], 330, 'Aclarado ligero.'), T.plagas(14, 'Cochinilla, pulgón.')],
+  h: [], pl: [3, 4], win: [], u: 'Como la lima, con piel comestible.', c: [], a: '', b: 'Vivero especializado; disponibilidad no verificada.' },
+
+{ id: 'satsuma', g: 'citrico', n: 'Mandarino satsuma', s: 'Citrus reticulata (satsuma)', src: 'guia', fit: 'bueno',
+  fn: 'La mandarina más resistente al frío; crece más que los cítricos anteriores.',
+  sun: 'Pleno sol', pot: '50-80 L', soil: 'Como el limonero', w: [6, 3, 2, 4], wn: 'Como el limonero.',
+  t: [T.abono([3, 4, 5, 6, 7, 8, 9], 30, 'Abono para cítricos.'), T.poda([2, 3], 330, 'Aclarado ligero.'), T.plagas(14, 'Cochinilla, pulgón, minador.')],
+  h: [], pl: [3, 4], win: [], u: 'Fruta de mesa, zumo, ralladura en repostería.', c: [], a: '', b: 'Vivero en primavera.' },
+
+{ id: 'naranjo', g: 'citrico', n: 'Naranjo dulce', s: 'Citrus × sinensis', src: 'gen', fit: 'ideal',
+  fn: 'Es un cultivo de la zona. En maceta pide el mismo manejo que el limonero y más espacio. Valoración propia.',
+  sun: 'Pleno sol', pot: '60-100 L', soil: 'Como el limonero', w: [6, 3, 2, 4], wn: 'Como el limonero.',
+  t: [T.abono([3, 4, 5, 6, 7, 8, 9], 30, 'Abono para cítricos.'), T.poda([2, 3], 330, 'Aclarado ligero.'), T.plagas(14, 'Cochinilla, pulgón, minador.')],
+  h: [], pl: [3, 4], win: [], u: 'Zumo, ralladura, salsas, repostería.', c: ['Elige variedad enana o sobre portainjerto enano para maceta.'], a: '', b: 'Vivero en primavera.' },
+
+{ id: 'kaffir', g: 'citrico', n: 'Lima kaffir (makrut)', s: 'Citrus hystrix', src: 'gen', fit: 'cuidados',
+  fn: 'Cítrico tropical: sensible al frío. Sin datos de cultivo local; resguárdalo en noches frías y no lo dejes secar en verano.',
+  sun: 'Sol; sombra parcial en horas centrales de olas de calor', pot: '30-50 L', soil: 'Drenante y rico en materia orgánica', w: [7, 3, 2, 4],
+  wn: 'Humedad regular sin encharcar.',
+  t: [T.abono([3, 4, 5, 6, 7, 8, 9], 30, 'Abono para cítricos.'), T.plagas(14, 'Cochinilla, pulgón, araña roja.')],
+  h: [], pl: [3, 4], win: [],
+  u: 'Las hojas (frescas o congeladas) y la ralladura de la piel: curris, tom yum, cocina tailandesa, camboyana e indonesia.',
+  c: ['Tiene espinas.', 'Se cosechan hojas sueltas, sin desnudar el árbol.'],
+  a: 'Disponibilidad en España no verificada.', b: 'No he podido verificar un proveedor concreto en España. Pregunta en viveros especializados en cítricos.' },
+
+{ id: 'yuzu', g: 'citrico', n: 'Yuzu', s: 'Citrus junos', src: 'gen', fit: 'cuidados',
+  fn: 'Es de los cítricos más tolerantes al frío; lo delicado aquí será el calor seco del verano. Sin datos locales.',
+  sun: 'Sol; sombra parcial de tarde en pleno verano', pot: '40-60 L', soil: 'Como el limonero', w: [7, 4, 2, 5],
+  wn: 'Como el limonero; no dejar secar del todo.',
+  t: [T.abono([3, 4, 5, 6, 7, 8, 9], 30, 'Abono para cítricos.'), T.plagas(14, 'Cochinilla, pulgón.')],
+  h: [], pl: [3, 4], win: [],
+  u: 'Piel rallada y zumo: ponzu, aliños, repostería y cocina japonesa y coreana.',
+  c: ['Tiene espinas.', 'Crece despacio.'], a: 'Disponibilidad en España no verificada.',
+  b: 'No he podido verificar un proveedor concreto en España. Pregunta en viveros especializados en cítricos.' },
+
+/* ------------------------------ AROMÁTICAS · mediterráneas ------------------------------ */
+{ id: 'romero', g: 'aromatica', n: 'Romero', s: 'Salvia rosmarinus', src: 'guia', fit: 'ideal',
+  fn: 'Muy resistente a la sequía y puede soportar algunas heladas.',
+  sun: 'Pleno sol', pot: '≥ 30 cm de profundidad', soil: 'Muy drenante: universal + perlita (2:1)', w: [14, 7, 4, 8],
+  wn: 'Riega cuando el sustrato se haya secado. Mejor quedarse corto que pasarse.',
+  t: [T.poda([4, 5], 330, 'Poda ligera tras la floración.'), T.plagas(21, 'Escarabajo del romero y plagas en el envés.')],
+  h: ALLM, pl: [10, 11, 3, 4],
+  win: [{ l: 'Esquejes', m: [9, 10], x: 'Finales de verano a principios de otoño (RHS).' }],
+  u: 'Carnes asadas, patatas, pan, focaccia, marinadas.', c: ['Plantas de vivero, no semillas.', 'Renueva con esquejes si se vuelve leñoso y decae.'], a: '', b: 'Vivero local.' },
+
+{ id: 'tomillo', g: 'aromatica', n: 'Tomillo', s: 'Thymus vulgaris', src: 'guia', fit: 'ideal',
+  fn: 'Sol y poca agua: encaja con la zona.', sun: 'Pleno sol', pot: '≥ 30 cm; mejor en barro', soil: 'Muy drenante', w: [14, 7, 4, 8],
+  wn: 'Poco; mejor en barro, que se seca entre riegos.',
+  t: [T.poda([4, 5], 330, 'Recorta tras la floración para que no se ponga leñoso.', 'Recortar'), T.plagas(21, 'Escarabajo del romero.')],
+  h: ALLM, pl: [10, 11, 3, 4],
+  win: [{ l: 'Dividir o esquejes', m: [4, 5, 9, 10], x: 'Cuando acabe de florecer o en primavera (RHS).' }],
+  u: 'Guisos, caldos, bouquet garni, aves, setas.', c: ['Rastrero: va bien delante de plantas altas.'], a: '', b: 'Vivero local.' },
+
+{ id: 'oregano', g: 'aromatica', n: 'Orégano', s: 'Origanum vulgare', src: 'guia', fit: 'ideal',
+  fn: 'Perenne (hasta unos 6 años); riego moderado.', sun: 'Pleno sol', pot: '≥ 30 cm', soil: 'Drenante', w: [10, 5, 3, 6],
+  wn: 'Moderado.', t: [T.poda([4, 5, 9], 150, 'Recorta para que no se extienda.', 'Recortar')],
+  h: [3, 4, 5, 6, 7, 8, 9, 10], pl: [10, 11, 3, 4],
+  win: [{ l: 'Dividir', m: [4, 5, 9, 10], x: 'Tras la floración o en primavera.' }],
+  u: 'Pizza, tomate, carnes, aliños, aceitunas.', c: ['Se seca bien colgado en manojos.'], a: '', b: 'Vivero local.' },
+
+{ id: 'mejorana', g: 'aromatica', n: 'Mejorana', s: 'Origanum majorana', src: 'guia', fit: 'bueno',
+  fn: 'Mismas condiciones que el orégano; más tierna. Puede sufrir roya.', sun: 'Pleno sol', pot: '≥ 30 cm', soil: 'Drenante', w: [10, 5, 3, 6],
+  wn: 'Moderado.', t: [T.poda([4, 5, 9], 150, 'Recorta tras la floración.', 'Recortar')],
+  h: [4, 5, 6, 7, 8, 9, 10], pl: [3, 4, 10], win: [{ l: 'Esquejes', m: [9, 10], x: 'Se multiplica por esquejes.' }],
+  u: 'Salsas, embutidos, carnes, sopas.', c: [], a: '', b: 'Vivero local.' },
+
+{ id: 'salvia', g: 'aromatica', n: 'Salvia', s: 'Salvia officinalis', src: 'guia', fit: 'ideal',
+  fn: 'Sol pleno; riego ocasional una vez establecida.', sun: 'Pleno sol', pot: '≥ 30 cm', soil: 'Muy drenante', w: [14, 7, 4, 8],
+  wn: 'Ocasional una vez establecida.', t: [T.poda([4, 5], 150, 'Despunta para que ramifique.', 'Despuntar')],
+  h: ALLM, pl: [10, 11, 3, 4], win: [{ l: 'Esquejes', m: [9, 10], x: 'Finales de verano a principios de otoño.' }],
+  u: 'Pasta con mantequilla, saltimbocca, rellenos, aves.', c: [], a: '', b: 'Vivero local.' },
+
+{ id: 'ajedrea', g: 'aromatica', n: 'Ajedrea', s: 'Satureja montana', src: 'guia', fit: 'ideal',
+  fn: 'Como el romero y el tomillo.', sun: 'Pleno sol', pot: '≥ 30 cm', soil: 'Muy drenante', w: [14, 7, 4, 8],
+  wn: 'Poco.', t: [T.poda([4, 5], 330, 'Recorta tras la floración.', 'Recortar')],
+  h: ALLM, pl: [10, 11, 3, 4], win: [], u: 'Legumbres, judías, embutidos, aliños.', c: [], a: '', b: 'Vivero local.' },
+
+{ id: 'lavanda', g: 'aromatica', n: 'Lavanda', s: 'Lavandula angustifolia', src: 'guia', fit: 'bueno',
+  fn: 'Pide sol, drenaje y muy poca agua; sensible al exceso de riego.', sun: 'Pleno sol, mínimo 6 h', pot: '≥ 30 cm de profundidad', soil: 'Muy drenante', w: [14, 7, 4, 8],
+  wn: 'Escaso. Evita mojar las hojas.', t: [T.poda([8, 9], 330, 'Recorta tras la floración, sin cortar en madera vieja.')],
+  h: [5, 6, 7, 8], pl: [10, 11, 3, 4], win: [],
+  u: 'Uso culinario ocasional: flores en postres, helados y mieles. Usa solo plantas sin tratamientos.',
+  c: ['Renueva con esquejes si se pone leñosa y decae.'], a: '', b: 'Vivero local.' },
+
+{ id: 'laurel', g: 'aromatica', n: 'Laurel', s: 'Laurus nobilis', src: 'guia', fit: 'bueno',
+  fn: 'Arbusto grande de crecimiento lento. Las hojas sufren quemaduras por viento (RHS).', sun: 'Sol o algo de sombra, resguardado del viento', pot: '≥ 30-40 L, propio', soil: 'Base de tierra con grava o arena', w: [10, 5, 3, 6],
+  wn: 'Moderado; en verano la maceta se seca rápido.', t: [T.trasp([3, 4], 700, 'Cada dos años en primavera; los años intermedios repón los 5 cm superiores del sustrato.')],
+  h: ALLM, pl: [10, 11, 3, 4], win: [{ l: 'Esquejes', m: [9, 10], x: 'Finales de verano a principios de otoño (RHS).' }],
+  u: 'Guisos, escabeches, legumbres, caldos.', c: ['No lo mezcles con otras plantas.'], a: '', b: 'Vivero local.' },
+
+{ id: 'estragon', g: 'aromatica', n: 'Estragón francés', s: 'Artemisia dracunculus', src: 'gen', fit: 'cuidados',
+  fn: 'Sin datos de cultivo local; el estragón francés no da semilla viable y se compra como planta o se divide.', sun: 'Sol; sombra de tarde en verano', pot: '≥ 30 cm', soil: 'Drenante', w: [10, 5, 3, 6],
+  wn: 'Moderado; no encharcar.', t: [],
+  h: [4, 5, 6, 7, 8, 9, 10], pl: [3, 4], win: [{ l: 'Dividir', m: [3, 4], x: 'Se multiplica por división de mata.' }],
+  u: 'Salsa bearnesa, pollo, pescado, vinagres aromáticos.', c: [], a: '', b: 'Planta de vivero (el francés no se siembra).' },
+
+/* ------------------------------ AROMÁTICAS · hoja tierna ------------------------------ */
+{ id: 'perejil', g: 'aromatica', n: 'Perejil', s: 'Petroselinum crispum', src: 'guia', fit: 'bueno',
+  fn: 'Tolera el frío; en verano pide humedad regular y algo de sombra.', sun: 'Sol o semisombra', pot: '≥ 20 cm de profundidad', soil: 'Rico, húmedo, drenante', w: [5, 3, 1, 3],
+  wn: 'Regular; sustrato húmedo.', t: [T.abono([4, 5, 6, 7, 8, 9], 45, 'Abono orgánico suave (poco).')],
+  h: [10, 11, 12, 1, 2, 3, 4, 5, 6], sw: [9, 10, 11, 2, 3], pl: [10, 11, 3],
+  win: [], u: 'Persillade, salsa verde, chimichurri, tabulé.', c: ['Bienal. Cosecha desde las hojas de fuera para que siga brotando.'], a: '', b: 'Semillas en cualquier tienda de huerto o plantel de vivero.' },
+
+{ id: 'cebollino', g: 'aromatica', n: 'Cebollino', s: 'Allium schoenoprasum', src: 'guia', fit: 'bueno',
+  fn: 'Perenne; agradece compost y sustrato rico.', sun: 'Sol o semisombra', pot: '≥ 20 cm', soil: 'Rico en materia orgánica', w: [5, 3, 2, 3],
+  wn: 'Más frecuente que las mediterráneas.', t: [T.abono([3, 4, 5, 6, 7, 8, 9], 60, 'Compost o abono orgánico suave.')],
+  h: [3, 4, 5, 6, 7, 8, 9, 10], sw: [2, 3, 4], pl: [3, 4, 10],
+  win: [], u: 'Huevos, patata, yogur, ensaladas, salmón.', c: [], a: '', b: 'Semillas o planta de vivero.' },
+
+{ id: 'eneldo', g: 'aromatica', n: 'Eneldo', s: 'Anethum graveolens', src: 'guia', fit: 'bueno',
+  fn: 'Anual; le va bien el fresco, así que mejor sembrar en otoño. Sube a flor rápido con calor.', sun: 'Sol suave', pot: '≥ 25 cm', soil: 'Drenante', w: [5, 3, 1, 3],
+  wn: 'Regular.', t: [], h: [11, 12, 1, 2, 3, 4], sw: [10, 11, 2, 3], pl: [],
+  win: [], u: 'Salmón marinado, encurtidos, yogur, patatas.', c: ['Siembra escalonada.'], a: '', b: 'Semillas en cualquier tienda de huerto.' },
+
+{ id: 'hinojo', g: 'aromatica', n: 'Hinojo (hierba)', s: 'Foeniculum vulgare', src: 'gen', fit: 'bueno',
+  fn: 'Planta mediterránea; necesita sol y maceta profunda por su raíz. Valoración propia.', sun: 'Pleno sol', pot: '≥ 40 cm de profundidad', soil: 'Drenante', w: [10, 5, 3, 6],
+  wn: 'Moderado.', t: [], h: [3, 4, 5, 6, 7, 8, 9], sw: [3, 4, 9, 10], pl: [],
+  win: [], u: 'Hojas en pescado, ensaladas; semillas en panes, embutidos y adobos.', c: [], a: '', b: 'Semillas en tienda de huerto.' },
+
+{ id: 'perifollo', g: 'aromatica', n: 'Perifollo', s: 'Anthriscus cerefolium', src: 'gen', fit: 'cuidados',
+  fn: 'Hierba de clima fresco: solo aguanta en otoño-invierno-principios de primavera. Valoración propia.', sun: 'Semisombra', pot: '≥ 20 cm', soil: 'Húmedo y fresco', w: [5, 3, 1, 3],
+  wn: 'Regular, sustrato fresco.', t: [], h: [12, 1, 2, 3, 4], sw: [10, 11, 1, 2], pl: [],
+  win: [], u: 'Cocina francesa: finas hierbas, huevos, salsas, pescado.', c: ['Siembra escalonada y en el sitio definitivo.'], a: '', b: 'Semillas en tienda de huerto especializada.' },
+
+{ id: 'hierbabuena', g: 'aromatica', n: 'Hierbabuena', s: 'Mentha spicata', src: 'guia', fit: 'bueno',
+  fn: 'Pide humedad constante; en pleno sol de verano, sombra de tarde.', sun: 'Sol de mañana o semisombra', pot: 'Su propia maceta', soil: 'Rico y húmedo', w: [4, 2, 1, 2],
+  wn: 'Frecuente; sustrato húmedo.', t: [T.plagas(21, 'Puede sufrir roya.')],
+  h: [3, 4, 5, 6, 7, 8, 9, 10], pl: [3, 4, 9, 10],
+  win: [{ l: 'Dividir o esquejes', m: [3, 4, 9, 10], x: 'Cuando acabe de florecer o en primavera (RHS).' }],
+  u: 'Té moruno, tabulé, tzatziki, cócteles, cordero.', c: ['Siempre sola: sus raíces invaden las de otras plantas.'], a: '', b: 'Planta de vivero o esqueje de una planta sana.' },
+
+{ id: 'menta', g: 'aromatica', n: 'Menta piperita', s: 'Mentha × piperita', src: 'guia', fit: 'bueno',
+  fn: 'Como la hierbabuena.', sun: 'Sol de mañana o semisombra', pot: 'Su propia maceta', soil: 'Rico y húmedo', w: [4, 2, 1, 2],
+  wn: 'Frecuente.', t: [T.plagas(21, 'Roya.')], h: [3, 4, 5, 6, 7, 8, 9, 10], pl: [3, 4, 9, 10],
+  win: [{ l: 'Dividir o esquejes', m: [3, 4, 9, 10], x: 'Tras la floración o en primavera.' }],
+  u: 'Infusiones, postres, salsas.', c: ['Siempre sola.'], a: '', b: 'Planta de vivero.' },
+
+{ id: 'melisa', g: 'aromatica', n: 'Melisa', s: 'Melissa officinalis', src: 'guia', fit: 'bueno',
+  fn: 'Humedad constante; perenne.', sun: 'Sol de mañana o semisombra', pot: '≥ 25 cm', soil: 'Rico, fresco', w: [4, 2, 1, 2],
+  wn: 'Humedad constante.', t: [], h: [3, 4, 5, 6, 7, 8, 9, 10], pl: [3, 4, 10],
+  win: [], u: 'Infusiones, postres, ensaladas de fruta.', c: [], a: '', b: 'Planta de vivero.' },
+
+{ id: 'hierbaluisa', g: 'aromatica', n: 'Hierba luisa', s: 'Aloysia citrodora', src: 'gen', fit: 'bueno',
+  fn: 'Arbusto de origen sudamericano, sensible al frío intenso; en una zona sin heladas funciona. Valoración propia.', sun: 'Pleno sol', pot: '≥ 30 L', soil: 'Drenante, rico', w: [8, 4, 2, 5],
+  wn: 'Riego regular en verano.', t: [T.poda([2], 330, 'Poda de formación a finales de invierno.')],
+  h: [4, 5, 6, 7, 8, 9, 10], pl: [3, 4], win: [{ l: 'Esquejes', m: [6, 7, 8], x: 'Esquejes semileñosos.' }],
+  u: 'Infusión, helados, postres, pescados y marinadas con aroma cítrico.', c: ['Puede perder hojas en invierno: es normal.'], a: '', b: 'Planta de vivero.' },
+
+{ id: 'albahaca', g: 'aromatica', n: 'Albahaca genovesa', s: 'Ocimum basilicum', src: 'guia', fit: 'bueno',
+  fn: 'Anual de calor; en Almería, el verano le gusta si no se le seca la maceta.', sun: 'Pleno sol', pot: '≥ 15 cm de profundidad', soil: 'Rico y drenante', w: [6, 3, 1, 3],
+  wn: 'Frecuente, sin encharcar.', t: [T.abono([5, 6, 7, 8, 9], 30, 'Abono orgánico suave; el exceso rebaja el sabor.')],
+  h: [5, 6, 7, 8, 9, 10], sw: [3, 4, 5], pl: [4, 5],
+  win: [], u: 'Pesto, caprese, salsas de tomate, pizzas.', c: ['Anual: siembra en primavera.', 'Pellizca las flores para que dure.'], a: '', b: 'Semillas en cualquier tienda de huerto.' },
+
+/* ------------------------------ AROMÁTICAS · Sudamérica y Asia ------------------------------ */
+{ id: 'albahacatai', g: 'aromatica', n: 'Albahaca tailandesa', s: 'Ocimum basilicum var. thyrsiflora', src: 'gen', fit: 'bueno',
+  fn: 'Mismo cultivo que la albahaca genovesa; le va bien el calor. Valoración propia.', sun: 'Pleno sol', pot: '≥ 15 cm de profundidad', soil: 'Rico y drenante', w: [6, 3, 1, 3],
+  wn: 'Frecuente, sin encharcar.', t: [T.abono([5, 6, 7, 8, 9], 30, 'Abono orgánico suave.')],
+  h: [5, 6, 7, 8, 9, 10], sw: [3, 4, 5], pl: [4, 5],
+  win: [], u: 'Sabor anisado: curris, salteados, pho, tailandés y vietnamita; se añade al final.', c: ['Pellizca las flores.'], a: '', b: 'Semillas: tiendas especializadas en hierbas del mundo; stock no verificado.' },
+
+{ id: 'cilantro', g: 'aromatica', n: 'Cilantro', s: 'Coriandrum sativum', src: 'guia', fit: 'cuidados',
+  fn: 'Sube a flor rápido con calor: siembra de otoño a primavera y evita el verano.', sun: 'Sol suave; sombra en meses cálidos', pot: '≥ 25 cm', soil: 'Ligero, rico', w: [5, 3, 1, 2],
+  wn: 'Regular; tolera mal la sequía.', t: [],
+  h: [11, 12, 1, 2, 3, 4, 5], sw: [9, 10, 11, 12, 1, 2], pl: [],
+  win: [], u: 'Guacamole, salsas, curris, ceviche, cocina asiática y latina. La semilla es la coriandra.',
+  c: ['Siembra escalonada cada 3-4 semanas.', 'No siembres de junio a agosto: se va a flor.'], a: '', b: 'Semillas en cualquier tienda de huerto.' },
+
+{ id: 'culantro', g: 'aromatica', n: 'Culantro (recao)', s: 'Eryngium foetidum', src: 'gen', fit: 'cuidados',
+  fn: 'Hierba tropical de sotobosque: pide semisombra y humedad; el aire seco de Almería será el reto. Valoración propia.', sun: 'Semisombra', pot: '≥ 20 cm', soil: 'Rico, húmedo', w: [4, 2, 1, 2],
+  wn: 'Humedad constante.', t: [], h: [5, 6, 7, 8, 9, 10], sw: [3, 4, 5], pl: [],
+  win: [], u: 'Caribe, Sudamérica y Asia. A diferencia del cilantro, el sabor se mantiene al cocinarla o secarla (Rare Palm Seeds).',
+  c: ['No confundir con el cilantro: es otra planta.'], a: '', b: 'Semillas: Rare Palm Seeds (rarepalmseeds.com/eryngium-foetidum). Revisa condiciones de pedido y envío.' },
+
+{ id: 'huacatay', g: 'aromatica', n: 'Huacatay', s: 'Tagetes minuta', src: 'gen', fit: 'bueno',
+  fn: 'Anual de crecimiento alto; tolera calor. Valoración propia.', sun: 'Pleno sol', pot: '≥ 30 cm', soil: 'Drenante', w: [6, 3, 2, 3],
+  wn: 'Regular.', t: [], h: [6, 7, 8, 9, 10], sw: [3, 4, 5], pl: [],
+  win: [], u: 'Perú: base de salsas como la ocopa y el ají de huacatay; también en pachamanca.',
+  c: ['Puede superar 1 m: necesita maceta estable.'], a: '', b: 'No he podido verificar un proveedor concreto en España. Prueba semillas de Tagetes minuta en tiendas especializadas.' },
+
+{ id: 'epazote', g: 'aromatica', n: 'Epazote', s: 'Dysphania ambrosioides', src: 'gen', fit: 'bueno',
+  fn: 'Anual rústica; se resiembra sola. Valoración propia.', sun: 'Sol', pot: '≥ 25 cm', soil: 'Cualquiera drenante', w: [8, 4, 2, 4],
+  wn: 'Moderado.', t: [], h: [5, 6, 7, 8, 9, 10], sw: [4, 5], pl: [],
+  win: [], u: 'México: frijoles de olla, quesadillas, sopas. Se usa en cantidades pequeñas.',
+  c: ['El aceite esencial es tóxico a dosis altas: usa solo cantidades culinarias.'], a: '', b: 'No he podido verificar un proveedor concreto en España.' },
+
+{ id: 'shiso', g: 'aromatica', n: 'Shiso (perilla)', s: 'Perilla frutescens', src: 'gen', fit: 'bueno',
+  fn: 'Anual; mejor con sombra de tarde y humedad regular. Valoración propia.', sun: 'Sol de mañana o semisombra', pot: '≥ 25 cm', soil: 'Rico y fresco', w: [6, 3, 1, 3],
+  wn: 'Regular; no dejar secar.', t: [], h: [6, 7, 8, 9, 10], sw: [4, 5], pl: [],
+  win: [], u: 'Japón y Corea: sushi, tempura, ensaladas, encurtidos.', c: ['Se resiembra sola.'], a: '',
+  b: 'No he podido verificar un proveedor concreto en España. Kokopelli (semillas libres): revisa su catálogo.' },
+
+{ id: 'cebollinochino', g: 'aromatica', n: 'Cebollino chino', s: 'Allium tuberosum', src: 'gen', fit: 'ideal',
+  fn: 'Perenne rústica, de hoja plana. Valoración propia.', sun: 'Sol o semisombra', pot: '≥ 20 cm', soil: 'Drenante', w: [6, 3, 2, 4],
+  wn: 'Moderado.', t: [], h: [3, 4, 5, 6, 7, 8, 9, 10], sw: [3, 4, 9, 10], pl: [3, 4, 10],
+  win: [{ l: 'Dividir', m: [3, 4], x: 'Se divide la mata.' }], u: 'Gyozas, salteados, tortillas, ensaladas.', c: [], a: '', b: 'Semillas en tienda de huerto o planta de vivero.' },
+
+{ id: 'cilantrovn', g: 'aromatica', n: 'Cilantro vietnamita', s: 'Persicaria odorata', src: 'gen', fit: 'cuidados',
+  fn: 'Pide sombra y humedad; no tolera sequedad ni frío. Valoración propia.', sun: 'Semisombra', pot: '≥ 20 cm', soil: 'Húmedo, rico', w: [4, 2, 1, 2],
+  wn: 'Humedad constante.', t: [], h: [5, 6, 7, 8, 9, 10], sw: [], pl: [4, 5],
+  win: [{ l: 'Esquejes en agua', m: [4, 5, 6], x: 'Se enraíza un tallo en un vaso con agua.' }],
+  u: 'Sudeste asiático: ensaladas, laksa, sopas, rollitos.', c: ['Se multiplica por esquejes de tallo.'], a: '',
+  b: 'Tallos en tiendas asiáticas (para enraizar) o vivero especializado; stock no verificado.' },
+
+{ id: 'hierbalimon', g: 'aromatica', n: 'Hierba limón', s: 'Cymbopogon citratus', src: 'gen', fit: 'bueno',
+  fn: 'Gramínea tropical: le gusta el calor y el agua; deja de crecer con frío. Valoración propia.', sun: 'Pleno sol', pot: '≥ 20 L', soil: 'Rico, húmedo, drenante', w: [8, 3, 1, 4],
+  wn: 'Regular; no dejar secar en verano.', t: [T.abono([5, 6, 7, 8, 9], 30, 'Abono equilibrado suave.')],
+  h: [6, 7, 8, 9, 10], pl: [4, 5], win: [{ l: 'Enraizar tallos del súper', m: [4, 5, 6], x: 'Tallos con la base en agua.' }],
+  u: 'Tom yum, curris, caldos y marinadas del sudeste asiático.', c: ['Empieza con tallos de tienda asiática o planta de vivero.'], a: '',
+  b: 'Tallos en tienda asiática o planta de vivero; stock no verificado.' },
+
+{ id: 'curry', g: 'aromatica', n: 'Hoja de curry', s: 'Murraya koenigii', src: 'gen', fit: 'cuidados',
+  fn: 'Arbusto tropical de crecimiento lento; sensible al frío. Sin datos de cultivo local.', sun: 'Sol; sombra parcial en horas centrales', pot: '≥ 30 L', soil: 'Drenante, rico', w: [8, 4, 2, 5],
+  wn: 'Moderado.', t: [T.abono([4, 5, 6, 7, 8, 9], 45, 'Abono equilibrado suave.')],
+  h: [5, 6, 7, 8, 9, 10], pl: [4, 5], win: [], u: 'India del sur y Sri Lanka: tadka, curris, arroces.',
+  c: ['Resguárdala de noches frías.'], a: 'Disponibilidad en España no verificada.', b: 'No he podido verificar un proveedor concreto en España.' },
+
+{ id: 'jengibre', g: 'aromatica', n: 'Jengibre', s: 'Zingiber officinale', src: 'gen', fit: 'cuidados',
+  fn: 'Rizoma tropical: pide calor, humedad y semisombra; el ciclo dura unos 8-10 meses. Valoración propia.', sun: 'Semisombra', pot: '≥ 20 L ancha', soil: 'Rico y drenante', w: [10, 3, 2, 5],
+  wn: 'Humedad regular; reduce en invierno.', t: [], h: [11, 12, 1], pl: [3, 4], win: [],
+  u: 'Cocina asiática, infusiones, encurtidos.', c: ['Planta un trozo de rizoma con yemas (de tienda ecológica o asiática).'], a: '', b: 'Rizomas en tienda asiática o ecológica.' },
+
+{ id: 'curcuma', g: 'aromatica', n: 'Cúrcuma', s: 'Curcuma longa', src: 'gen', fit: 'cuidados',
+  fn: 'Como el jengibre: calor, humedad, semisombra; cosecha tras 8-10 meses. Valoración propia.', sun: 'Semisombra', pot: '≥ 20 L ancha', soil: 'Rico y drenante', w: [10, 3, 2, 5],
+  wn: 'Humedad regular; reduce en invierno.', t: [], h: [12, 1, 2], pl: [3, 4], win: [],
+  u: 'Curris, arroces, golden milk; cosecha en forma de rizoma.', c: ['Mancha las manos y la ropa.'], a: '', b: 'Rizomas en tienda asiática o ecológica.' },
+
+/* ------------------------------ PICANTES ------------------------------ */
+{ id: 'cayena', g: 'picante', n: 'Guindilla cayena', s: 'Capsicum annuum', src: 'guia', fit: 'ideal', sc: '≈ 30.000-50.000 SHU',
+  fn: 'Cultivo de calor y de temporada: mínimas medias por encima de 12 °C de abril a noviembre (AEMET).',
+  sun: 'Máximo sol; sombra parcial en horas centrales si pasa de 35 °C', pot: '8-12 L (la RHS indica 22 cm de diámetro como mínimo)',
+  soil: 'Profundo, rico en materia orgánica y drenante', w: [7, 3, 1, 3],
+  wn: 'Moderado y constante; no alternes sequía y encharcamiento. Revisa a diario en verano.',
+  t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono líquido rico en potasio desde que empiece la floración (RHS). Evita el exceso de nitrógeno.'),
+      T.plagas(7, 'Revisa el envés cada semana: araña roja, pulgón, mosca blanca. Babosas en plántulas.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [7, 8, 9, 10, 11], sw: [2, 3], pl: [4, 5],
+  win: [{ l: 'Maceta definitiva', m: [4, 5], x: 'Unos 2 meses tras sembrar, con más de 15 cm y 5-6 hojas; tutor ahora.' }, { l: 'Pellizcar', m: [4, 5], x: 'A 20-30 cm: corta la punta para que ramifique.' }],
+  u: 'Secas y trituradas (cayena), aceites picantes, salsas y adobos.', c: ['Siembra a 2-3 mm; germina mejor a 25-32 °C en 7-21 días (RHS).', 'Sale fuera con noches estables por encima de 12 °C.', 'Cosecha con tijera; cuanto más recoges, más produce.', 'Usa guantes al cortarla; no te toques los ojos.'],
+  a: 'Trátala como anual: de diciembre a marzo, a cubierto.', b: 'Ya la tienes. Semillas: tienda de huerto (Planeta Huerto, ChiliPlanet).' },
+
+{ id: 'cayennetta', g: 'picante', n: 'Cayennetta', s: 'Capsicum annuum', src: 'guia', fit: 'ideal', sc: 'Picor suave',
+  fn: 'Cayena compacta (0,5-1 m) y de alto rendimiento; muy buena para maceta (RHS).', sun: 'Máximo sol', pot: '8-12 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Como la cayena.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono líquido rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [7, 8, 9, 10, 11], sw: [2, 3], pl: [4, 5], win: [], u: 'Cayena de picor suave para uso fresco y seco.', c: [], a: '', b: 'Semillas: tiendas de huerto.' },
+
+{ id: 'piparra', g: 'picante', n: 'Piparra (guindilla de Ibarra)', s: 'Capsicum annuum', src: 'guia', fit: 'ideal', sc: 'Muy suave',
+  fn: 'Fruto de 5-12 cm, carne tierna, piel fina; se come encurtida o frita.', sun: 'Máximo sol', pot: '8-12 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Como la cayena.', t: [T.abono([6, 7, 8, 9, 10], 10, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [7, 8, 9, 10], sw: [2, 3], pl: [4, 5], win: [], u: 'Encurtidos, fritas con sal, pinchos.', c: [], a: '', b: 'Semillas: tiendas de huerto.' },
+
+{ id: 'jalapeno', g: 'picante', n: 'Jalapeño', s: 'Capsicum annuum', src: 'guia', fit: 'ideal', sc: '≈ 2.500-8.000 SHU',
+  fn: 'El chile mexicano más conocido; mismo manejo que la cayena.', sun: 'Máximo sol', pot: '10-15 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Como la cayena.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [7, 8, 9, 10, 11], sw: [2, 3], pl: [4, 5], win: [], u: 'Salsas, rellenos, encurtidos, nachos; ahumado se llama chipotle.', c: [], a: '', b: 'Semillas: tiendas de huerto.' },
+
+{ id: 'hotwax', g: 'picante', n: 'Hungarian Hot Wax', s: 'Capsicum annuum', src: 'guia', fit: 'ideal', sc: 'Picor medio-alto',
+  fn: 'Planta compacta de unos 60 cm; frutos cónicos de hasta 10 cm que maduran de amarillo a rojo (RHS).', sun: 'Máximo sol', pot: '8-12 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Como la cayena.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [7, 8, 9, 10], sw: [2, 3], pl: [4, 5], win: [], u: 'Encurtido, relleno, asado.', c: [], a: '', b: 'Semillas: tiendas de huerto.' },
+
+{ id: 'habanero', g: 'picante', n: 'Habanero', s: 'Capsicum chinense', src: 'gen', fit: 'bueno', sc: '≈ 100.000-350.000 SHU',
+  fn: 'Hasta 90 cm; el más exigente en calor de los comunes. La temporada larga de Almería le sienta bien: siembra pronto.', sun: 'Máximo sol', pot: '12-20 L', soil: 'Profundo, drenante, rico', w: [7, 3, 1, 3],
+  wn: 'Constante; evita el encharcamiento.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón, mosca blanca.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [8, 9, 10, 11], sw: [1, 2], pl: [4, 5], win: [], u: 'Salsas, adobos, cocina yucateca y caribeña.', c: ['Germina más lento que la cayena: siembra en enero-febrero.', 'Guantes obligatorios.'], a: 'Muy picante: manipular con guantes.', b: 'Semillas: ChiliPlanet (Dénia), Planeta Huerto.' },
+
+{ id: 'thai', g: 'picante', n: 'Chile tailandés (Thai Dragon / bird’s eye)', s: 'Capsicum annuum', src: 'gen', fit: 'bueno', sc: '≈ 50.000-100.000 SHU',
+  fn: 'Planta productiva con frutos pequeños y erguidos. Valoración propia: mismo manejo que la cayena.', sun: 'Máximo sol', pot: '8-12 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Como la cayena.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [7, 8, 9, 10, 11], sw: [2, 3], pl: [4, 5], win: [], u: 'Pastas de curry, salteados, salsas, cocina tailandesa.', c: [], a: '', b: 'Semillas de Thai Dragon: pepperseeds.eu (listado verificado).' },
+
+{ id: 'cheongyang', g: 'picante', n: 'Chile coreano Cheongyang', s: 'Capsicum annuum', src: 'gen', fit: 'bueno', sc: 'Picor medio-alto',
+  fn: 'Chile alargado de la cocina coreana. Valoración propia: mismo manejo que la cayena.', sun: 'Máximo sol', pot: '10-15 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Como la cayena.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [7, 8, 9, 10, 11], sw: [2, 3], pl: [4, 5], win: [], u: 'Sopas, guisos, encurtidos y kimchi.', c: [], a: '', b: 'No he podido verificar un proveedor concreto en España. Prueba tiendas de semillas de chile (ChiliPlanet).' },
+
+{ id: 'tianjiao', g: 'picante', n: 'Chile Facing Heaven (Sichuan)', s: 'Capsicum annuum', src: 'gen', fit: 'bueno', sc: 'Picor medio-alto',
+  fn: 'Chile chino de frutos erguidos; seco da el picor típico de Sichuan. Valoración propia.', sun: 'Máximo sol', pot: '10-15 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Como la cayena.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [8, 9, 10, 11], sw: [2, 3], pl: [4, 5], win: [], u: 'Aceite de chile, mapo tofu, salteados secos.', c: [], a: '', b: 'No he podido verificar un proveedor concreto en España.' },
+
+{ id: 'shishito', g: 'picante', n: 'Shishito', s: 'Capsicum annuum', src: 'gen', fit: 'ideal', sc: 'Muy suave (≈ 50-200 SHU)',
+  fn: 'Pimiento japonés casi sin picor, alguno sorprende. Valoración propia.', sun: 'Máximo sol', pot: '10-15 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Como la cayena.', t: [T.abono([6, 7, 8, 9, 10], 10, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [7, 8, 9, 10], sw: [2, 3], pl: [4, 5], win: [], u: 'A la plancha con sal y limón.', c: [], a: '', b: 'Semillas: tiendas de huerto especializadas.' },
+
+{ id: 'kashmiri', g: 'picante', n: 'Chile de Cachemira', s: 'Capsicum annuum', src: 'gen', fit: 'bueno', sc: '≈ 1.000-2.000 SHU',
+  fn: 'Da color rojo intenso con poco picor; típico del curry indio. Valoración propia.', sun: 'Máximo sol', pot: '10-15 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Como la cayena.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [8, 9, 10, 11], sw: [2, 3], pl: [4, 5], win: [], u: 'Curris y tandoori: color sin mucho picor.', c: [], a: '', b: 'No he podido verificar un proveedor concreto en España.' },
+
+{ id: 'amarillo', g: 'picante', n: 'Ají amarillo', s: 'Capsicum baccatum', src: 'gen', fit: 'bueno', sc: '≈ 30.000-50.000 SHU',
+  fn: 'Pilar de la cocina peruana. Planta alta; le va bien el calor, pero necesita temporada larga: siembra en enero-febrero. Valoración propia.', sun: 'Máximo sol', pot: '15-20 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Constante.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [8, 9, 10, 11], sw: [1, 2], pl: [4, 5], win: [], u: 'Salsas peruanas, ceviche, ají de gallina, causa.', c: ['Tutor firme: la planta crece alta.'], a: '',
+  b: 'Plantas: Pepper Joe’s (EE. UU., pepperjoe.com/es; envío a España no verificado). Semillas: tiendas de chile.' },
+
+{ id: 'charapita', g: 'picante', n: 'Ají charapita', s: 'Capsicum chinense', src: 'gen', fit: 'cuidados', sc: '≈ 30.000-50.000 SHU',
+  fn: 'Chile amazónico de frutos diminutos; pide calor y humedad constantes. Valoración propia.', sun: 'Sol con sombra parcial en horas centrales', pot: '12-20 L', soil: 'Rico, drenante', w: [7, 3, 1, 3],
+  wn: 'Constante.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [8, 9, 10, 11], sw: [1, 2], pl: [4, 5], win: [], u: 'Perú: salsas, ceviches y platos amazónicos.', c: [], a: '', b: 'No he podido verificar un proveedor concreto en España.' },
+
+{ id: 'aji-limon', g: 'picante', n: 'Ají limón (lemon drop)', s: 'Capsicum baccatum', src: 'gen', fit: 'bueno', sc: '≈ 15.000-30.000 SHU',
+  fn: 'Sabor cítrico y frutal. Valoración propia.', sun: 'Máximo sol', pot: '15-20 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Constante.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [8, 9, 10, 11], sw: [1, 2], pl: [4, 5], win: [], u: 'Salsas, ceviche, pescados.', c: [], a: '', b: 'Semillas: ChiliPlanet (Dénia), Planeta Huerto.' },
+
+{ id: 'panca', g: 'picante', n: 'Ají panca', s: 'Capsicum baccatum', src: 'gen', fit: 'bueno', sc: '≈ 500-1.500 SHU',
+  fn: 'Chile peruano suave y ahumado una vez seco. Valoración propia.', sun: 'Máximo sol', pot: '15-20 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Constante.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [8, 9, 10, 11], sw: [1, 2], pl: [4, 5], win: [], u: 'Adobos y guisos peruanos (seco).', c: [], a: '', b: 'No he podido verificar un proveedor concreto en España.' },
+
+{ id: 'rocoto', g: 'picante', n: 'Rocoto (locoto)', s: 'Capsicum pubescens', src: 'gen', fit: 'dificil', sc: '≈ 30.000-100.000 SHU',
+  fn: 'Chile de altura andina: sufre con el calor. En Almería solo con semisombra y riego muy cuidado; no tolera bien los 30 °C+. Valoración propia.', sun: 'Semisombra', pot: '20-30 L', soil: 'Rico, fresco y drenante', w: [7, 3, 2, 4],
+  wn: 'Constante; no dejar secar.', t: [T.abono([5, 6, 7, 8, 9], 10, 'Abono equilibrado y potasio al cuajar.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [8, 9, 10, 11, 12], sw: [1, 2], pl: [4, 5], win: [], u: 'Rocoto relleno arequipeño, salsas.', c: [], a: 'Dificultad alta en clima cálido.', b: 'No he podido verificar un proveedor concreto en España.' },
+
+{ id: 'aji-dulce', g: 'picante', n: 'Ají dulce', s: 'Capsicum chinense', src: 'gen', fit: 'bueno', sc: 'Muy suave',
+  fn: 'Aromático, casi sin picor; base de sofritos caribeños y venezolanos. Valoración propia.', sun: 'Máximo sol', pot: '12-20 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Constante.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [8, 9, 10, 11], sw: [1, 2], pl: [4, 5], win: [], u: 'Sofritos, guisos y arroces del Caribe.', c: [], a: '', b: 'No he podido verificar un proveedor concreto en España.' },
+
+{ id: 'malagueta', g: 'picante', n: 'Malagueta', s: 'Capsicum frutescens', src: 'gen', fit: 'bueno', sc: '≈ 60.000-100.000 SHU',
+  fn: 'Chile brasileño de frutos pequeños. Valoración propia.', sun: 'Máximo sol', pot: '12-20 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Constante.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [8, 9, 10, 11], sw: [1, 2], pl: [4, 5], win: [], u: 'Moqueca, salsas de mesa brasileñas.', c: [], a: '', b: 'No he podido verificar un proveedor concreto en España.' },
+
+{ id: 'piripiri', g: 'picante', n: 'Piri-piri', s: 'Capsicum frutescens', src: 'gen', fit: 'bueno', sc: '≈ 50.000-175.000 SHU',
+  fn: 'Chile africano y portugués. Valoración propia.', sun: 'Máximo sol', pot: '12-20 L', soil: 'Profundo y drenante', w: [7, 3, 1, 3],
+  wn: 'Constante.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [8, 9, 10, 11], sw: [1, 2], pl: [4, 5], win: [], u: 'Pollo piri-piri, salsas, aceites.', c: [], a: '', b: 'Semillas: ChiliPlanet (Dénia), Planeta Huerto.' },
+
+{ id: 'bhut', g: 'picante', n: 'Bhut Jolokia', s: 'C. chinense × frutescens', src: 'gen', fit: 'cuidados', sc: '≈ 1.000.000 SHU',
+  fn: 'Pide temporada larga y mucho calor. Valoración propia.', sun: 'Máximo sol', pot: '20-30 L', soil: 'Profundo, rico y drenante', w: [7, 3, 1, 3],
+  wn: 'Constante.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [9, 10, 11], sw: [1, 2], pl: [4, 5], win: [], u: 'Salsas extremadamente picantes.', c: ['Guantes y gafas para manipularla.'], a: 'Extremadamente picante: lejos de niños y mascotas.', b: 'Semillas: ChiliPlanet (Dénia), Planeta Huerto.' },
+
+{ id: 'reaper', g: 'picante', n: 'Carolina Reaper', s: 'Capsicum chinense', src: 'gen', fit: 'cuidados', sc: '≈ 1.500.000 SHU',
+  fn: 'Pide temporada larga y mucho calor. Valoración propia.', sun: 'Máximo sol', pot: '20-30 L', soil: 'Profundo, rico y drenante', w: [7, 3, 1, 3],
+  wn: 'Constante.', t: [T.abono([6, 7, 8, 9, 10], 7, 'Abono rico en potasio.'), T.plagas(7, 'Araña roja, pulgón.', [4, 5, 6, 7, 8, 9, 10, 11])],
+  h: [9, 10, 11], sw: [1, 2], pl: [4, 5], win: [], u: 'Salsas extremas, en cantidades mínimas.', c: ['Guantes y gafas para manipularla.'], a: 'Extremadamente picante: lejos de niños y mascotas.', b: 'Semillas: ChiliPlanet (Dénia), Planeta Huerto.' },
+
+/* ------------------------------ SUCULENTAS Y CACTUS ------------------------------ */
+{ id: 'lengua', g: 'suculenta', n: 'Lengua de suegra', s: 'Dracaena trifasciata (antes Sansevieria)', src: 'guia', fit: 'bueno',
+  fn: 'Ideal 15-29 °C; no tolera heladas. En invierno, cobijo de la lluvia y el frío (mínima media de enero 8,3 °C).',
+  sun: 'Luz brillante o sol suave; el sol fuerte de tarde en verano le quema las hojas', pot: 'De barro con agujeros', soil: 'Ligero, aireado y drenante',
+  w: [30, 14, 10, 21], wn: 'Solo cuando el sustrato esté completamente seco. Manda el sustrato, no el calendario.',
+  t: [T.abono([5, 6, 7, 8], 45, 'Abono líquido de vez en cuando (poco).'), T.plagas(30, 'Hojas blandas o amarillas: exceso de agua o mal drenaje.')],
+  h: [], pl: [], win: [{ l: 'Dividir rizomas', m: [4, 5], x: 'Cuando crezca mucho; cada trozo a su maceta.' }],
+  u: 'Ornamental.', c: ['Si recibe lluvia o el agua se acumula, el frío y la humedad favorecen la pudrición.'], a: 'Tóxica si se ingiere.', b: 'Ya la tienes.' },
+
+{ id: 'aloe', g: 'suculenta', n: 'Aloe vera', s: 'Aloe vera (barbadensis)', src: 'guia', fit: 'ideal',
+  fn: 'Prefiere unos 10-27 °C; sensible a heladas. En Almería es la más fácil de dejar fuera, pero ponla bajo techo de octubre a diciembre si llueve.',
+  sun: 'Pleno sol (acostumbrarla poco a poco); sombra en horas fuertes si se pone rojiza', pot: 'De barro con agujeros, sin plato',
+  soil: 'Cactus y suculentas con 30-50 % de arena, grava o perlita', w: [30, 10, 8, 17],
+  wn: 'Cuando los primeros centímetros estén secos; casi nada en invierno. No tolera sustrato permanentemente húmedo.',
+  t: [T.abono([6, 7, 8], 30, 'Abono bajo en nitrógeno o específico para cactus.'), T.plagas(30, 'Hojas con manchas blandas: exceso de riego.')],
+  h: [], pl: [3, 4], win: [{ l: 'Separar hijuelos', m: [4, 5], x: 'Cuando tengan raíces propias, a macetas pequeñas.' }],
+  u: 'Gel de la hoja en cosmética; la corteza amarilla (aloína) es laxante. No es un alimento común.', c: ['Compra con hojas firmes, sin manchas blandas, y mejor con hijuelos.'], a: 'Dañina si se ingiere (RHS).', b: 'Vivero o garden center.' },
+
+{ id: 'agave', g: 'suculenta', n: 'Agave attenuata', s: 'Agave attenuata', src: 'guia', fit: 'ideal',
+  fn: 'Sol, o sol parcial en sitios muy calurosos; muy buena en maceta. Una helada ligera puede dañar las hojas.',
+  sun: 'Sol', pot: 'De barro, con agujeros', soil: 'Cactus + arena gruesa', w: [30, 14, 14, 21], wn: 'Poco.',
+  t: [T.abono([6, 7, 8], 45, 'Abono bajo en nitrógeno.')], h: [], pl: [3, 4], win: [], u: 'Ornamental.',
+  c: ['Después de florecer muere, pero deja hijuelos.'], a: '', b: 'Vivero o garden center.' },
+
+{ id: 'jade', g: 'suculenta', n: 'Árbol de jade', s: 'Crassula ovata', src: 'guia', fit: 'bueno',
+  fn: 'No tolera heladas; mejor por encima de unos 10 °C. Protege del sol más fuerte de verano.', sun: 'Sol; protege del más fuerte de verano', pot: 'De barro', soil: 'Cactus + arena gruesa',
+  w: [25, 12, 11, 17], wn: 'Deja secar entre riegos.', t: [T.abono([6, 7, 8], 45, 'Abono bajo en nitrógeno.')], h: [], pl: [3, 4], win: [],
+  u: 'Ornamental.', c: ['Con los años forma un pequeño arbusto; flores blancas en invierno.'], a: '', b: 'Vivero o garden center.' },
+
+{ id: 'aeonium', g: 'suculenta', n: 'Aeonium arboreum', s: 'Aeonium arboreum', src: 'guia', fit: 'bueno',
+  fn: 'De las Canarias. Crece en otoño-primavera y descansa en verano.', sun: 'Sol; sombra de tarde en verano', pot: 'De barro', soil: 'Cactus + arena gruesa',
+  w: [14, 10, 30, 10], wn: 'Casi nada en julio-agosto. Si parece muerta en verano, suele ser reposo.', t: [T.plagas(30, 'Pulgón.')], h: [], pl: [10, 11, 3, 4], win: [],
+  u: 'Ornamental. No tóxica.', c: [], a: '', b: 'Vivero o garden center.' },
+
+{ id: 'echeveria', g: 'suculenta', n: 'Echeveria', s: 'Echeveria spp.', src: 'gen', fit: 'bueno',
+  fn: 'Roseta compacta; sol fuerte de verano quema hojas: sombra parcial en horas centrales. Valoración propia.', sun: 'Sol; sombra parcial en verano', pot: 'De barro, pequeña', soil: 'Cactus + arena gruesa',
+  w: [21, 10, 10, 14], wn: 'Empapa y deja secar.', t: [T.plagas(30, 'Cochinilla algodonosa.')], h: [], pl: [3, 4, 10], win: [], u: 'Ornamental.', c: [], a: '', b: 'Vivero o garden center.' },
+
+{ id: 'haworthia', g: 'suculenta', n: 'Haworthia', s: 'Haworthia spp.', src: 'gen', fit: 'bueno',
+  fn: 'Crece bien con luz brillante sin sol directo fuerte. Valoración propia.', sun: 'Luz brillante, sin sol directo fuerte', pot: 'De barro, pequeña', soil: 'Cactus + arena gruesa',
+  w: [21, 10, 10, 14], wn: 'Empapa y deja secar.', t: [], h: [], pl: [3, 4, 10], win: [], u: 'Ornamental.', c: [], a: '', b: 'Vivero o garden center.' },
+
+{ id: 'cactus', g: 'suculenta', n: 'Cactus de maceta', s: 'Mammillaria, Echinopsis...', src: 'guia', fit: 'ideal',
+  fn: 'Si están secos, unos 5 °C bastan (BCSS). Un descanso invernal frío y seco favorece la floración.', sun: 'Pleno sol', pot: 'De barro', soil: 'Cactus + arena gruesa',
+  w: [45, 10, 10, 30], wn: 'Cada 1-2 semanas en primavera-verano; secos en invierno.', t: [T.abono([6, 7, 8], 45, 'Abono específico para cactus.')], h: [], pl: [3, 4], win: [],
+  u: 'Ornamental.', c: ['Sin plato.'], a: '', b: 'Vivero o garden center.' },
+
+{ id: 'euphorbia', g: 'suculenta', n: 'Corona de espinas', s: 'Euphorbia milii', src: 'guia', fit: 'bueno',
+  fn: 'Tolera bien la costa. Semisombra a pleno sol.', sun: 'Semisombra a pleno sol', pot: 'De barro', soil: 'Cactus', w: [30, 14, 10, 21], wn: 'Poco; suelo seco.',
+  t: [], h: [], pl: [3, 4], win: [], u: 'Ornamental.', c: [], a: 'Savia irritante: usa guantes.', b: 'Vivero o garden center.' },
+
+{ id: 'chumbera', g: 'suculenta', n: 'Chumbera (higo chumbo)', s: 'Opuntia ficus-indica', src: 'guia', fit: 'ideal',
+  fn: 'Resiste la sequía y los vientos marinos.', sun: 'Sol intenso', pot: 'Grande, estable', soil: 'Cactus', w: [60, 21, 14, 30], wn: 'Muy poco.',
+  t: [], h: [8, 9, 10], pl: [3, 4], win: [], u: 'Frutos (higos chumbos) y pencas (nopales) comestibles con precaución por las espinas.',
+  c: [], a: 'El MITECO la describe como invasora en la cuenca mediterránea: no tires fragmentos al campo.', b: 'No se recomienda para terraza: hay mejores opciones.' }
+];
+
+const BYID = Object.fromEntries(CAT.map(p => [p.id, p]));
+
+/* ventanas de protección frente al frío (guía: chiles a cubierto de diciembre a marzo; aloe y lengua de suegra, cobijo) */
+CAT.filter(c => c.g === 'picante').forEach(c => c.win.push({ l: 'A cubierto del frío', m: [12, 1, 2, 3], x: 'Mínimas medias por debajo de 12 °C (AEMET): trátala como anual o resguárdala.' }));
+BYID.lengua.win.push({ l: 'Cobijo de lluvia y frío', m: [11, 12, 1, 2], x: 'Bajo techo en las noches más frías.' });
+BYID.aloe.win.push({ l: 'Bajo techo si llueve', m: [10, 11, 12], x: 'Evita lluvia fuerte y frío prolongado.' });
+
+/* ============================================================
+   TERRAZA DE HUÉRCAL · lógica de la app
+   Datos en localStorage; si no está disponible, en memoria (y avisa).
+   ============================================================ */
+(function () {
+'use strict';
+
+/* ---------- utilidades de fecha ---------- */
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const MES3 = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const DIAS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const pad = n => String(n).padStart(2, '0');
+const iso = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const parse = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d, 12); };
+const today0 = () => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12); };
+const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n, 12);
+const diff = (a, b) => Math.round((b - a) / 86400000); // días de a a b
+const mo = d => d.getMonth() + 1;
+const season = m => (m === 12 || m <= 2) ? 0 : m <= 5 ? 1 : m <= 9 ? 2 : 3;
+const SEASON_N = ['Invierno', 'Primavera', 'Verano', 'Otoño'];
+const SEASON_M = ['dic-feb', 'mar-may', 'jun-sep', 'oct-nov'];
+const fmtLong = d => DIAS[d.getDay()] + ' ' + d.getDate() + ' de ' + MESES[d.getMonth()];
+const fmtShort = s => { const d = parse(s); return d.getDate() + ' ' + MES3[d.getMonth()]; };
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const num1 = n => String(n).replace('.', ',');
+const rel = n => n === 0 ? 'hoy' : n === 1 ? 'mañana' : n === -1 ? 'ayer' : n > 0 ? 'en ' + n + ' días' : 'hace ' + (-n) + ' días';
+const uid = () => Math.random().toString(36).slice(2, 9);
+
+/* ---------- iconos ---------- */
+const I = {
+  today: '<path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/><circle cx="12" cy="12" r="4"/>',
+  plants: '<path d="M12 21v-8"/><path d="M12 13c0-4 3-7 8-7 0 5-3 7-8 7z"/><path d="M12 15c0-3-2-5-6-5 0 4 2 5 6 5z"/><path d="M7 21h10"/>',
+  cal: '<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  book: '<path d="M5 4h10a3 3 0 013 3v13H8a3 3 0 01-3-3z"/><path d="M5 17a3 3 0 013-3h10"/>',
+  more: '<circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  drop: '<path d="M12 3s6 6.4 6 11a6 6 0 01-12 0c0-4.600 6-11 6-11z"/>',
+  back: '<path d="M15 5l-7 7 7 7"/>',
+  close: '<path d="M6 6l12 12M18 6L6 18"/>',
+  bell: '<path d="M6 17V11a6 6 0 0112 0v6l1.5 2h-15z"/><path d="M10 21h4"/>',
+  citrus: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="5.200"/><path d="M12 6.800v10.400M6.800 12h10.400M8.300 8.300l7.400 7.400M15.700 8.300l-7.400 7.400"/>',
+  leaf: '<path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19c3-5 6-8 10-10"/>',
+  chili: '<path d="M7 9c3-3 9-2 11 2 1 3-1 5-3 7-4 4-9 3-10 1 3 0 5-1 6-4 1-2 0-4-4-6z"/><path d="M15 6c1-2 2-3 4-3"/>',
+  agave: '<path d="M12 21c-1-6-1-10 0-16 1 6 1 10 0 16z"/><path d="M12 21C9 16 6 13 3 12c4 0 7 1 9 4"/><path d="M12 21c3-5 6-8 9-9-4 0-7 1-9 4"/>',
+  trash: '<path d="M4 7h16M10 4h4M6 7l1 13h10l1-13"/>',
+  edit: '<path d="M4 20l4-1 11-11-3-3L5 16z"/>',
+  sprout: '<path d="M12 21v-9"/><path d="M12 12c0-4-3-6-7-6 0 4 3 6 7 6z"/><path d="M12 12c0-3 2-5 6-5 0 3-2 5-6 5z"/>',
+  shears: '<circle cx="7" cy="17" r="3"/><circle cx="17" cy="17" r="3"/><path d="M9 15L18 4M15 15L6 4"/>',
+  bug: '<ellipse cx="12" cy="14" rx="4.500" ry="6"/><path d="M12 8V5M8 11L4 9M16 11l4-2M8 16H4M16 16h4M9 20l-3 2M15 20l3 2"/>',
+  bag: '<path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 016 0"/>',
+  store: '<path d="M4 10l1.500-5h13L20 10M4 10v10h16V10M4 10h16"/><path d="M10 20v-6h4v6"/>',
+  save: '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.500v.1"/>',
+  box: '<path d="M4 8l8-4 8 4v9l-8 4-8-4z"/><path d="M4 8l8 4 8-4M12 12v9"/>'
+};
+const ic = (n, cls) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"' + (cls ? ' class="' + cls + '"' : '') + '>' + I[n] + '</svg>';
+const TASK_IC = { riego: 'drop', abono: 'sprout', poda: 'shears', plagas: 'bug', trasplante: 'box', siembra: 'sprout' };
+
+/* ---------- estado y persistencia ---------- */
+const KEY = 'terraza-huercal.v1';
+let storageOK = true;
+let mem = null;
+function seed() {
+  const t = iso(today0());
+  return {
+    v: 1, tab: 'hoy',
+    plants: [
+      { uid: 'p' + uid(), cat: 'limonero', nick: 'Limonero del mercado', added: t, stage: 'plantada', potL: null, place: 'Al sol', note: 'Mide unos 1,40 m. Aún sin trasplantar.', mult: 1, log: [] },
+      { uid: 'p' + uid(), cat: 'cayena', nick: 'Guindilla cayena', added: t, stage: 'plantada', potL: null, place: 'Al sol', note: '', mult: 1, log: [] },
+      { uid: 'p' + uid(), cat: 'lengua', nick: 'Lengua de suegra', added: t, stage: 'plantada', potL: null, place: '', note: '', mult: 1, log: [] }
+    ],
+    rem: [], snooze: {}, shop: [], theme: 'auto', seeded: true
+  };
+}
+function load() {
+  try {
+    const r = localStorage.getItem(KEY);
+    if (r) { const s = JSON.parse(r); if (s && s.plants) return s; }
+  } catch (e) { storageOK = false; }
+  return seed();
+}
+let S = load();
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(S)); storageOK = true; }
+  catch (e) { storageOK = false; mem = JSON.stringify(S); }
+}
+function applyTheme() {
+  const r = document.documentElement;
+  if (S.theme === 'dark' || S.theme === 'light') r.setAttribute('data-theme', S.theme); else r.removeAttribute('data-theme');
+}
+
+/* ---------- lógica de tareas ---------- */
+const catOf = p => BYID[p.cat];
+const gcol = p => GROUPS[catOf(p).g].c;
+const lastLog = (p, k) => { let r = null; for (const e of p.log) if (e.k === k && (!r || e.d > r)) r = e.d; return r; };
+const waterInterval = (p, d) => Math.max(1, Math.round(catOf(p).w[season(mo(d))] * (p.mult || 1)));
+function clampWindow(d, months) {
+  if (!months || months.includes(mo(d))) return d;
+  for (let i = 1; i <= 12; i++) {
+    const m = new Date(d.getFullYear(), d.getMonth() + i, 1, 12);
+    if (months.includes(mo(m))) return m;
+  }
+  return d;
+}
+function taskDefs(p) {
+  const c = catOf(p);
+  if (p.stage === 'proyecto') {
+    const m = c.sw && c.sw.length ? c.sw : c.pl;
+    if (!m || !m.length) return [];
+    return [{ k: 'siembra', l: c.sw && c.sw.length ? 'Sembrar' : 'Plantar o comprar', m, e: 365, x: 'Es la época recomendada. Al marcarla como hecha, la planta pasa a «plantada».' }];
+  }
+  return [{ k: 'riego', l: 'Regar', m: null, e: 0, x: '' }].concat(c.t);
+}
+function nextDue(p, t) {
+  const last = lastLog(p, t.k);
+  let d;
+  if (t.k === 'riego') { const b = last ? parse(last) : parse(p.added); d = addDays(b, waterInterval(p, b)); }
+  else if (t.k === 'siembra') d = parse(p.added);
+  else if (last) d = addDays(parse(last), t.e);
+  else if (t.e >= 300) d = addDays(parse(p.added), 14);
+  else d = addDays(parse(p.added), t.e);
+  d = clampWindow(d, t.m);
+  const sn = S.snooze[p.uid + '|' + t.k];
+  if (sn && parse(sn) > d) d = parse(sn);
+  return d;
+}
+function whyText(p, t) {
+  const c = catOf(p);
+  if (t.k === 'riego') {
+    const iv = waterInterval(p, today0());
+    return 'Cada ' + iv + (iv === 1 ? ' día' : ' días') + ' en ' + SEASON_N[season(mo(today0()))].toLowerCase() + (p.mult && p.mult !== 1 ? ' (ajustado a tu registro)' : '') + '. Comprueba el sustrato con el dedo.';
+  }
+  return t.x;
+}
+function recTasks(upTo) {
+  // tareas recomendadas con vencimiento <= upTo
+  const out = [];
+  for (const p of S.plants) for (const t of taskDefs(p)) {
+    const d = nextDue(p, t);
+    if (d <= upTo) out.push({ src: 'rec', p, t, due: d });
+  }
+  return out;
+}
+function manualDue(upTo) {
+  const out = [];
+  for (const r of S.rem) if (!r.done && parse(r.date) <= upTo) out.push({ src: 'man', r, due: parse(r.date) });
+  return out;
+}
+function nextRep(r, from) {
+  if (r.rep === 'm') { const d = new Date(from.getFullYear(), from.getMonth() + 1, from.getDate(), 12); return d; }
+  return addDays(from, Number(r.rep));
+}
+function project(from, to) {
+  const out = {};
+  const add = (d, ev) => { const k = iso(d); (out[k] = out[k] || []).push(ev); };
+  const t0 = today0();
+  for (const p of S.plants) for (const t of taskDefs(p)) {
+    let d = nextDue(p, t);
+    if (d < t0) d = t0;
+    let g = 0;
+    while (d <= to && g++ < 500) {
+      if (d >= from) add(d, { src: 'rec', p, t });
+      if (t.k === 'siembra' || (t.k !== 'riego' && t.e >= 300)) break;
+      const nx = t.k === 'riego' ? addDays(d, waterInterval(p, d)) : addDays(d, t.e);
+      d = clampWindow(nx, t.m);
+    }
+  }
+  for (const r of S.rem) {
+    if (r.done) continue;
+    let d = parse(r.date), g = 0;
+    while (d <= to && g++ < 500) {
+      if (d >= from) add(d, { src: 'man', r });
+      if (!r.rep) break;
+      d = nextRep(r, d);
+    }
+  }
+  return out;
+}
+function logsOn(dstr) {
+  const out = [];
+  for (const p of S.plants) for (const e of p.log) if (e.d === dstr) out.push({ p, e });
+  return out;
+}
+const KLAB = { riego: 'Riego', abono: 'Abonado', poda: 'Poda', plagas: 'Revisión de plagas', trasplante: 'Trasplante', cosecha: 'Cosecha', siembra: 'Siembra', otro: 'Otro' };
+
+/* acciones de datos */
+function snoozeKey(p, t) { return p.uid + '|' + t.k; }
+function completeRec(puid, k, extra) {
+  const p = S.plants.find(x => x.uid === puid); if (!p) return null;
+  const e = { d: iso(today0()), k, n: extra && extra.n || '' };
+  if (extra && extra.f) e.f = extra.f;
+  p.log.push(e);
+  delete S.snooze[puid + '|' + k];
+  if (k === 'siembra') { p.stage = 'plantada'; p.added = iso(today0()); }
+  if (k === 'riego' && extra && extra.f) calibrate(p, extra.f);
+  save();
+  return { p, e };
+}
+function calibrate(p, f) {
+  let m = p.mult || 1;
+  if (f === 'humedo') m *= 1.2;       // seguía húmedo: espacia
+  else if (f === 'seco') m *= 0.8;    // estaba muy seco: acorta
+  p.mult = Math.min(2.5, Math.max(0.4, Math.round(m * 100) / 100));
+}
+
+/* ---------- vista ---------- */
+const $ = s => document.querySelector(s);
+let view = { tab: S.tab || 'hoy', sub: null, calMonth: null, calSel: iso(today0()), q: '', g: '', fit: '' };
+let toastT = null;
+
+function toast(msg, undo) {
+  const old = $('#toast'); if (old) old.remove();
+  const el = document.createElement('div'); el.id = 'toast'; el.className = 'toast'; el.setAttribute('role', 'status');
+  el.innerHTML = '<span>' + esc(msg) + '</span>' + (undo ? '<button data-act="undo">Deshacer</button>' : '');
+  document.body.appendChild(el);
+  toast.undo = undo || null;
+  clearTimeout(toastT); toastT = setTimeout(() => { el.remove(); toast.undo = null; }, 6000);
+}
+
+function sheet(html) {
+  closeSheet();
+  const sc = document.createElement('div'); sc.className = 'scrim'; sc.id = 'scrim'; sc.dataset.act = 'close';
+  const sh = document.createElement('div'); sh.className = 'sheet'; sh.id = 'sheet'; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true');
+  sh.innerHTML = '<div class="grab"></div>' + html;
+  document.body.appendChild(sc); document.body.appendChild(sh);
+  document.body.style.overflow = 'hidden';
+  const f = sh.querySelector('input,select,textarea'); if (f && matchMedia('(pointer:fine)').matches) f.focus();
+}
+function closeSheet() {
+  const a = $('#scrim'), b = $('#sheet'); if (a) a.remove(); if (b) b.remove();
+  document.body.style.overflow = '';
+}
+const shHead = (title, sub) => '<div class="hd"><div class="grow"><h2>' + esc(title) + '</h2>' + (sub ? '<div class="muted small">' + sub + '</div>' : '') + '</div><button class="x" data-act="close" aria-label="Cerrar">' + ic('close') + '</button></div>';
+
+/* ---------- piezas comunes ---------- */
+function fitChip(c) { const f = FIT[c.fit]; return '<span class="chip fit' + f.k + '">' + f.n + '</span>'; }
+function grpChip(c) { const g = GROUPS[c.g]; return '<span class="chip" style="--gc:' + g.c + '"><i></i>' + g.n + '</span>'; }
+function srcChip(c) { return '<span class="pill-src" title="' + (c.src === 'guia' ? 'Datos contrastados en la guía' : 'Pauta general; no hay dato publicado para Huércal') + '">' + (c.src === 'guia' ? 'Datos de la guía' : 'Pauta general') + '</span>'; }
+function monthStrip(c) {
+  const nowM = mo(today0());
+  const rows = [];
+  if (c.sw && c.sw.length) rows.push(['Sembrar', c.sw]);
+  if (c.pl && c.pl.length) rows.push(['Plantar', c.pl]);
+  if (c.h && c.h.length) rows.push(['Cosechar', c.h]);
+  for (const w of c.win || []) rows.push([w.l, w.m]);
+  if (!rows.length) return '';
+  const hd = '<div class="strip"><span class="nm"></span>' + 'EFMAMJJASOND'.split('').map((l, i) => '<span class="c hd' + (i + 1 === nowM ? ' now' : '') + '">' + l + '</span>').join('') + '</div>';
+  return '<div class="stack s8" style="--gc:' + GROUPS[c.g].c + '">' + hd + rows.map(([n, ms]) => '<div class="strip"><span class="nm">' + esc(n.length > 12 ? n.slice(0, 11) + '…' : n) + '</span>' + [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(m => '<span class="c' + (ms.includes(m) ? ' on' : '') + '"></span>').join('') + '</div>').join('') + '</div>';
+}
+function waterTable(p, c) {
+  const cur = season(mo(today0()));
+  const mult = p ? (p.mult || 1) : 1;
+  return '<table class="wtab"><tr>' + SEASON_N.map(s => '<th>' + s + '</th>').join('') + '</tr><tr>' +
+    c.w.map((v, i) => '<td class="' + (i === cur ? 'cur' : '') + '">' + Math.max(1, Math.round(v * mult)) + '<small>días<br>' + SEASON_M[i] + '</small></td>').join('') + '</tr></table>';
+}
+function monthsText(ms) {
+  if (!ms || !ms.length) return 'Todo el año';
+  if (ms.length === 12) return 'Todo el año';
+  return ms.map(m => MES3[m - 1]).join(', ');
+}
+
+/* ---------- pestañas ---------- */
+function render() {
+  document.querySelectorAll('.tabbar [data-tab]').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === view.tab ? 'true' : 'false'));
+  const m = $('#main');
+  const fns = { hoy: vHoy, plantas: vPlantas, cal: vCal, cat: vCat, mas: vMas };
+  m.innerHTML = (fns[view.tab] || vHoy)();
+  const fab = $('#fab'); if (fab) fab.hidden = !(view.tab === 'hoy' || view.tab === 'cal');
+  const n = recTasks(today0()).length + manualDue(today0()).length;
+  const bd = $('#bd'); if (bd) { bd.textContent = n; bd.hidden = !n; }
+  if (!storageOK) { m.insertAdjacentHTML('afterbegin', '<div class="note warn" style="margin-bottom:12px"><b>Sin almacenamiento.</b> Este navegador no deja guardar datos; se perderán al cerrar. Usa «Más → Copia de seguridad» para guardar una copia.</div>'); }
+}
+
+/* HOY */
+function taskCard(it) {
+  if (it.src === 'man') {
+    const r = it.r, p = r.puid && S.plants.find(x => x.uid === r.puid);
+    const dd = diff(today0(), it.due);
+    return '<div class="card task ' + (dd < 0 ? 'over' : '') + '" style="--gc:var(--accent)"><span class="bar"></span><div class="grow"><div class="t1">' + esc(r.title) + ' <span class="chip" style="margin-left:4px">Mío</span></div><div class="t2">' + (p ? esc(p.nick) + ' · ' : '') + '<span class="due">' + (dd < 0 ? rel(dd) : 'hoy') + '</span>' + (r.notes ? ' · ' + esc(r.notes) : '') + '</div></div>' +
+      '<div class="row"><button class="btn sm" data-act="man-done" data-id="' + r.id + '">Hecho</button><button class="btn sm sec" data-act="man-snooze" data-id="' + r.id + '" aria-label="Posponer un día">+1</button></div></div>';
+  }
+  const { p, t, due } = it, dd = diff(today0(), due), c = catOf(p);
+  const why = whyText(p, t);
+  return '<div class="card task ' + (dd < 0 ? 'over' : '') + '" style="--gc:' + gcol(p) + '"><span class="bar"></span><div class="grow"><div class="t1">' + esc(t.l) + ' · ' + esc(p.nick) + '</div>' +
+    '<div class="t2"><span class="due">' + (dd < 0 ? rel(dd) : 'hoy') + '</span>' + (why ? ' · ' + esc(why.length > 100 ? why.slice(0, 98) + '…' : why) : '') + '</div></div>' +
+    '<div class="row"><button class="btn sm" data-act="rec-done" data-uid="' + p.uid + '" data-k="' + t.k + '">Hecho</button><button class="btn sm sec" data-act="rec-snooze" data-uid="' + p.uid + '" data-k="' + t.k + '" aria-label="Posponer un día">+1</button></div></div>';
+}
+function vHoy() {
+  const t0 = today0(), m = mo(t0);
+  const items = recTasks(t0).concat(manualDue(t0)).sort((a, b) => a.due - b.due || (a.src === 'man' ? 1 : -1));
+  const waters = items.filter(i => i.src === 'rec' && i.t.k === 'riego');
+  const week = recTasks(addDays(t0, 7)).filter(i => i.due > t0).concat(manualDue(addDays(t0, 7)).filter(i => i.due > t0)).sort((a, b) => a.due - b.due);
+  const season_ = [];
+  for (const p of S.plants.filter(x => x.stage === 'plantada')) {
+    const c = catOf(p);
+    if (c.h && c.h.length && c.h.length < 12 && c.h.includes(m)) season_.push('Cosecha: ' + p.nick);
+    for (const w of c.win || []) if (w.m.includes(m)) season_.push(w.l + ': ' + p.nick);
+  }
+  let h = '<div class="top"><div><div class="kicker">Huércal de Almería</div><h1>' + esc(DIAS[t0.getDay()][0].toUpperCase() + DIAS[t0.getDay()].slice(1)) + ' ' + t0.getDate() + '</h1><div class="muted">' + MESES[t0.getMonth()] + ' ' + t0.getFullYear() + '</div></div></div>';
+  h += '<div class="climate"><div class="temps"><div><div class="lbl">Mínima media</div><div class="big tmin">' + num1(CLIMA.tmin[m - 1]) + '°</div></div><div><div class="lbl">Máxima media</div><div class="big tmax">' + num1(CLIMA.tmax[m - 1]) + '°</div></div><div class="grow small muted" style="text-align:right">de ' + MESES[m - 1] + '<br>AEMET Almería</div></div><p class="small" style="margin-top:8px">' + esc(CLIMA.notas[m - 1]) + '</p></div>';
+  h += '<div class="sec-title"><h2>Para hoy</h2>' + (waters.length > 1 ? '<button class="btn sm sec" data-act="water-all">Regar las ' + waters.length + '</button>' : '') + '</div>';
+  h += items.length ? '<div class="stack s8">' + items.map(taskCard).join('') + '</div>' : '<div class="empty">Nada pendiente hoy.<br><span class="small">' + (S.plants.length ? 'Las próximas tareas aparecen abajo.' : 'Añade tu primera planta desde el Catálogo.') + '</span></div>';
+  if (week.length) {
+    h += '<div class="sec-title"><h2>Próximos 7 días</h2></div><div class="card">' + week.slice(0, 14).map(i => {
+      const dd = diff(t0, i.due);
+      const nm = i.src === 'man' ? i.r.title : i.t.l + ' · ' + i.p.nick;
+      return '<div class="hist"><span class="muted">' + esc(rel(dd)) + '</span><span>' + esc(nm) + '</span><span></span></div>';
+    }).join('') + '</div>';
+  }
+  if (season_.length) h += '<div class="sec-title"><h2>En temporada</h2></div><div class="row wrap">' + season_.slice(0, 12).map(s => '<span class="chip">' + esc(s) + '</span>').join('') + '</div>';
+  h += '<p class="small muted" style="margin-top:20px">Las tareas «recomendadas» salen de las pautas de cada planta y de tu registro. Los recordatorios que creas tú llevan la etiqueta «Mío».</p>';
+  return h;
+}
+
+/* PLANTAS */
+function nextWaterInfo(p) {
+  if (p.stage === 'proyecto') return '<span class="chip">Proyecto</span>';
+  const d = nextDue(p, { k: 'riego', m: null }), dd = diff(today0(), d);
+  return '<span class="drop ' + (dd < 0 ? 'late' : '') + '">' + ic('drop').replace('<svg', '<svg width="16" height="16"') + (dd <= 0 ? 'hoy' : dd + ' d') + '</span>';
+}
+function vPlantas() {
+  let h = '<div class="top"><div><div class="kicker">Mi terraza</div><h1>Plantas</h1></div><button class="btn" data-act="goto" data-tab="cat">' + ic('plus').replace('<svg', '<svg width="18" height="18" style="vertical-align:-3px"') + ' Añadir</button></div>';
+  if (!S.plants.length) return h + '<div class="empty">Aún no tienes plantas.<br><span class="small">Elige una del Catálogo.</span></div>';
+  const order = S.plants.slice().sort((a, b) => (a.stage === 'proyecto') - (b.stage === 'proyecto') || a.nick.localeCompare(b.nick, 'es'));
+  h += '<div class="stack s8">' + order.map(p => {
+    const c = catOf(p);
+    return '<button class="card tap pcard" data-act="plant" data-uid="' + p.uid + '" style="--gc:' + gcol(p) + '"><span class="ico">' + ic(GROUPS[c.g].ic) + '</span><span class="grow"><span class="nm">' + esc(p.nick) + '</span><br><span class="sub">' + esc(c.n) + (p.potL ? ' · ' + p.potL + ' L' : '') + '</span></span>' + nextWaterInfo(p) + '</button>';
+  }).join('') + '</div>';
+  return h;
+}
+
+function plantSheet(puid) {
+  const p = S.plants.find(x => x.uid === puid); if (!p) return;
+  const c = catOf(p), mult = p.mult || 1;
+  const lg = p.log.slice().sort((a, b) => b.d.localeCompare(a.d)).slice(0, 12);
+  let h = shHead(p.nick, esc(c.n) + ' · <i>' + esc(c.s) + '</i>');
+  h += '<div class="row wrap">' + grpChip(c) + fitChip(c) + srcChip(c) + (p.stage === 'proyecto' ? '<span class="chip">Proyecto</span>' : '') + '</div>';
+  if (p.stage === 'plantada') {
+    h += '<div class="sec-title"><h2>Riego</h2><span class="small muted">' + (mult !== 1 ? 'Ajuste ×' + num1(mult) : 'Sin ajustar') + '</span></div><div class="card">' + waterTable(p, c) +
+      '<p class="small muted" style="margin-top:8px">' + esc(c.wn) + '</p><div class="row wrap" style="margin-top:10px"><button class="btn sm" data-act="log-water" data-uid="' + p.uid + '">' + ic('drop').replace('<svg', '<svg width="16" height="16" style="vertical-align:-3px"') + ' Regada ahora</button>' +
+      '<button class="btn sm sec" data-act="mult" data-uid="' + p.uid + '" data-v="up">Riega más a menudo</button><button class="btn sm sec" data-act="mult" data-uid="' + p.uid + '" data-v="down">Menos a menudo</button>' + (mult !== 1 ? '<button class="btn sm ghost" data-act="mult" data-uid="' + p.uid + '" data-v="reset">Restablecer</button>' : '') + '</div>' +
+      '<p class="small muted" style="margin-top:8px">Cada vez que anotas un riego y dices cómo estaba el sustrato, la app ajusta el intervalo. Los valores base son un punto de partida, no un dato medido en tu terraza.</p></div>';
+  }
+  const tasks = c.t.slice();
+  if (tasks.length) h += '<div class="sec-title"><h2>Tareas recomendadas</h2></div><div class="card stack s8">' + tasks.map(t => '<div><b>' + esc(t.l) + '</b> <span class="muted small">· ' + monthsText(t.m) + (t.e < 300 ? ' · cada ' + t.e + ' d' : ' · una vez al año') + '</span><div class="small">' + esc(t.x) + '</div></div>').join('') + '</div>';
+  const strip = monthStrip(c);
+  if (strip) h += '<div class="sec-title"><h2>Calendario de la planta</h2></div><div class="card">' + strip + '</div>';
+  h += '<div class="sec-title"><h2>Historial</h2><button class="btn sm sec" data-act="log-new" data-uid="' + p.uid + '">Anotar</button></div>';
+  h += '<div class="card">' + (lg.length ? lg.map(e => '<div class="hist"><span class="muted">' + fmtShort(e.d) + '</span><span>' + esc(KLAB[e.k] || e.k) + (e.f ? ' · ' + (e.f === 'humedo' ? 'aún húmedo' : e.f === 'seco' ? 'muy seco' : 'justo') : '') + (e.n ? ' — ' + esc(e.n) : '') + '</span><button class="btn sm ghost" data-act="log-del" data-uid="' + p.uid + '" data-i="' + p.log.indexOf(e) + '" aria-label="Borrar anotación">' + ic('trash').replace('<svg', '<svg width="14" height="14"') + '</button></div>').join('') : '<span class="muted small">Sin anotaciones todavía.</span>') + '</div>';
+  if (p.note) h += '<div class="sec-title"><h2>Mis notas</h2></div><div class="card small">' + esc(p.note) + '</div>';
+  h += '<div class="row wrap" style="margin-top:16px"><button class="btn sec" data-act="plant-info" data-id="' + c.id + '">Ver ficha</button><button class="btn sec" data-act="plant-edit" data-uid="' + p.uid + '">' + ic('edit').replace('<svg', '<svg width="16" height="16" style="vertical-align:-3px"') + ' Editar</button></div>';
+  sheet(h);
+}
+
+function catSheet(id, back) {
+  const c = BYID[id]; if (!c) return;
+  const mine = S.plants.filter(p => p.cat === id).length;
+  let h = shHead(c.n, '<i>' + esc(c.s) + '</i>');
+  h += '<div class="row wrap">' + grpChip(c) + fitChip(c) + srcChip(c) + (c.sc ? '<span class="chip">' + esc(c.sc) + '</span>' : '') + '</div>';
+  h += '<p class="small" style="margin-top:10px">' + esc(c.fn) + '</p>';
+  h += '<div class="sec-title"><h2>Lo básico</h2></div><div class="card facts"><div class="fact"><b>Luz</b><span>' + esc(c.sun) + '</span></div><div class="fact"><b>Maceta</b><span>' + esc(c.pot) + '</span></div><div class="fact"><b>Sustrato</b><span>' + esc(c.soil) + '</span></div><div class="fact"><b>Cocina</b><span>' + esc(c.u) + '</span></div></div>';
+  h += '<div class="sec-title"><h2>Riego orientativo</h2></div><div class="card">' + waterTable(null, c) + '<p class="small muted" style="margin-top:8px">' + esc(c.wn) + ' Intervalos para maceta al sol; punto de partida.</p></div>';
+  if (c.t.length) h += '<div class="sec-title"><h2>Tareas que programa la app</h2></div><div class="card stack s8">' + c.t.map(t => '<div><b>' + esc(t.l) + '</b> <span class="muted small">· ' + monthsText(t.m) + (t.e < 300 ? ' · cada ' + t.e + ' d' : ' · anual') + '</span><div class="small">' + esc(t.x) + '</div></div>').join('') + '</div>';
+  const strip = monthStrip(c); if (strip) h += '<div class="sec-title"><h2>Cuándo</h2></div><div class="card">' + strip + '</div>';
+  if (c.c && c.c.length) h += '<div class="sec-title"><h2>Cuidados</h2></div><div class="card"><ul class="plain">' + c.c.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>';
+  if (c.a) h += '<div class="note warn" style="margin-top:12px">' + esc(c.a) + '</div>';
+  h += '<div class="sec-title"><h2>Dónde conseguirla</h2></div><div class="card small">' + esc(c.b) + '<div class="muted" style="margin-top:6px">Stock y envío a España: compruébalos en la web antes de pedir.</div></div>';
+  h += '<div class="row wrap" style="margin-top:16px"><button class="btn grow" data-act="add-plant" data-id="' + c.id + '">' + (mine ? 'Añadir otra a mi terraza' : 'Añadir a mi terraza') + '</button><button class="btn sec" data-act="shop-add-cat" data-id="' + c.id + '">' + ic('bag').replace('<svg', '<svg width="16" height="16" style="vertical-align:-3px"') + ' A la compra</button></div>';
+  sheet(h);
+}
+
+function addPlantSheet(id) {
+  const c = BYID[id];
+  const pr = (c.sw && c.sw.length ? c.sw : c.pl) || [];
+  let h = shHead('Añadir ' + c.n);
+  h += '<form id="f-add" data-id="' + id + '"><label for="a-nick">Nombre</label><input id="a-nick" value="' + esc(c.n) + '" required>' +
+    '<label for="a-stage">Estado</label><select id="a-stage"><option value="plantada">Ya la tengo plantada</option><option value="proyecto">Quiero cultivarla (proyecto)</option></select>' +
+    '<p class="small muted" id="a-hint" style="margin-top:6px">En «proyecto» la app te avisa de la época de sembrar o plantar (' + monthsText(pr) + ').</p>' +
+    '<label for="a-pot">Maceta (litros, opcional)</label><input id="a-pot" type="number" min="1" step="1" inputmode="numeric" placeholder="Ej.: 20">' +
+    '<label for="a-place">Sitio</label><select id="a-place"><option>Al sol</option><option>Semisombra</option><option>A cubierto</option></select>' +
+    '<label for="a-note">Notas</label><input id="a-note" placeholder="Opcional">' +
+    '<div class="row" style="margin-top:16px"><button class="btn grow" type="submit">Añadir</button></div></form>';
+  sheet(h);
+}
+function editPlantSheet(puid) {
+  const p = S.plants.find(x => x.uid === puid); if (!p) return;
+  let h = shHead('Editar planta');
+  h += '<form id="f-edit" data-uid="' + p.uid + '"><label for="e-nick">Nombre</label><input id="e-nick" value="' + esc(p.nick) + '" required>' +
+    '<label for="e-stage">Estado</label><select id="e-stage"><option value="plantada"' + (p.stage === 'plantada' ? ' selected' : '') + '>Plantada</option><option value="proyecto"' + (p.stage === 'proyecto' ? ' selected' : '') + '>Proyecto</option></select>' +
+    '<label for="e-pot">Maceta (litros)</label><input id="e-pot" type="number" min="1" inputmode="numeric" value="' + (p.potL || '') + '">' +
+    '<label for="e-place">Sitio</label><select id="e-place">' + ['Al sol', 'Semisombra', 'A cubierto', ''].map(x => '<option value="' + x + '"' + (p.place === x ? ' selected' : '') + '>' + (x || 'Sin indicar') + '</option>').join('') + '</select>' +
+    '<label for="e-added">Fecha de plantación o compra</label><input id="e-added" type="date" value="' + p.added + '">' +
+    '<label for="e-note">Notas</label><textarea id="e-note">' + esc(p.note) + '</textarea>' +
+    '<div class="row" style="margin-top:16px"><button class="btn grow" type="submit">Guardar</button><button class="btn danger" type="button" data-act="plant-del" data-uid="' + p.uid + '" id="b-del">Borrar</button></div></form>';
+  sheet(h);
+}
+function logSheet(puid, kind) {
+  const p = S.plants.find(x => x.uid === puid); if (!p) return;
+  const ks = ['riego', 'abono', 'poda', 'plagas', 'trasplante', 'cosecha', 'siembra', 'otro'];
+  let h = shHead('Anotar en ' + p.nick);
+  h += '<form id="f-log" data-uid="' + p.uid + '"><label for="l-k">Qué has hecho</label><select id="l-k">' + ks.map(k => '<option value="' + k + '"' + (k === (kind || 'riego') ? ' selected' : '') + '>' + KLAB[k] + '</option>').join('') + '</select>' +
+    '<label for="l-d">Fecha</label><input id="l-d" type="date" value="' + iso(today0()) + '" max="' + iso(today0()) + '">' +
+    '<div id="l-fw"><label for="l-f">Estado del sustrato antes de regar</label><select id="l-f"><option value="">Sin indicar</option><option value="humedo">Aún húmedo (pude esperar)</option><option value="justo">Justo, listo para regar</option><option value="seco">Muy seco (llegué tarde)</option></select></div>' +
+    '<label for="l-n">Nota</label><input id="l-n" placeholder="Opcional">' +
+    '<div class="row" style="margin-top:16px"><button class="btn grow" type="submit">Guardar</button></div></form>';
+  sheet(h);
+}
+function waterFeedbackSheet(puid) {
+  const p = S.plants.find(x => x.uid === puid); if (!p) return;
+  let h = shHead('Regar ' + p.nick, 'Mete un dedo 3-4 cm en el sustrato: ¿cómo estaba antes de regar?');
+  h += '<div class="opt"><button data-act="water-fb" data-uid="' + p.uid + '" data-f="humedo"><b>Aún húmedo</b><span class="small muted">Podía esperar: la app espaciará el riego.</span></button>' +
+    '<button data-act="water-fb" data-uid="' + p.uid + '" data-f="justo"><b>Justo</b><span class="small muted">En su punto: sin cambios.</span></button>' +
+    '<button data-act="water-fb" data-uid="' + p.uid + '" data-f="seco"><b>Muy seco</b><span class="small muted">Llegué tarde: la app acortará el intervalo.</span></button>' +
+    '<button data-act="water-fb" data-uid="' + p.uid + '" data-f=""><b>No lo he comprobado</b><span class="small muted">Se anota sin ajustar nada.</span></button></div>';
+  sheet(h);
+}
+
+/* CALENDARIO */
+function vCal() {
+  const t0 = today0();
+  if (!view.calMonth) view.calMonth = new Date(t0.getFullYear(), t0.getMonth(), 1, 12);
+  const cm = view.calMonth, y = cm.getFullYear(), m0 = cm.getMonth();
+  const first = new Date(y, m0, 1, 12), lead = (first.getDay() + 6) % 7;
+  const start = addDays(first, -lead), end = addDays(start, 41);
+  const ev = project(start, end);
+  let h = '<div class="top"><div><div class="kicker">Calendario</div><h1>' + MESES[m0][0].toUpperCase() + MESES[m0].slice(1) + ' ' + y + '</h1></div></div>';
+  h += '<div class="nav"><button class="btn sm sec" data-act="cal-nav" data-n="-1" aria-label="Mes anterior">' + ic('back').replace('<svg', '<svg width="18" height="18"') + '</button><button class="btn sm ghost" data-act="cal-today">Hoy</button><button class="btn sm sec" data-act="cal-nav" data-n="1" aria-label="Mes siguiente"><span style="display:inline-block;transform:scaleX(-1)">' + ic('back').replace('<svg', '<svg width="18" height="18"') + '</span></button></div>';
+  h += '<div class="cal">' + ['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(x => '<div class="dh">' + x + '</div>').join('');
+  for (let i = 0; i < 42; i++) {
+    const d = addDays(start, i), k = iso(d), e = ev[k] || [], lg = logsOn(k);
+    const rec = e.filter(x => x.src === 'rec').length, man = e.filter(x => x.src === 'man').length;
+    h += '<button class="d' + (d.getMonth() !== m0 ? ' out' : '') + (k === iso(t0) ? ' today' : '') + (k === view.calSel ? ' sel' : '') + '" data-act="cal-sel" data-d="' + k + '" aria-label="' + esc(fmtLong(d)) + '"><span>' + d.getDate() + '</span><span class="dots">' + (rec ? '<i></i>' : '') + (man ? '<i class="m"></i>' : '') + (lg.length ? '<i class="l"></i>' : '') + '</span></button>';
+  }
+  h += '</div><div class="legend" style="margin-top:8px"><span><i style="background:var(--sea)"></i>Recomendada</span><span><i style="background:var(--accent)"></i>Mía</span><span><i style="background:var(--ok)"></i>Hecha</span></div>';
+  // detalle del día
+  const sel = parse(view.calSel), items = (ev[view.calSel] || project(sel, sel)[view.calSel] || []), lgs = logsOn(view.calSel);
+  h += '<div class="sec-title"><h2>' + esc(fmtLong(sel)) + '</h2><button class="btn sm sec" data-act="rem-new" data-d="' + view.calSel + '">Recordar</button></div><div class="card">';
+  if (!items.length && !lgs.length) h += '<span class="muted small">Nada programado ni anotado este día.</span>';
+  items.forEach(i => { h += '<div class="hist"><span class="chip" style="--gc:' + (i.src === 'man' ? 'var(--accent)' : gcol(i.p)) + '"><i></i>' + (i.src === 'man' ? 'Mío' : 'Rec.') + '</span><span>' + esc(i.src === 'man' ? i.r.title : i.t.l + ' · ' + i.p.nick) + '</span><span></span></div>'; });
+  lgs.forEach(x => { h += '<div class="hist"><span class="chip"><i style="--gc:var(--ok)"></i>Hecho</span><span>' + esc((KLAB[x.e.k] || x.e.k) + ' · ' + x.p.nick) + (x.e.n ? ' — ' + esc(x.e.n) : '') + '</span><span></span></div>'; });
+  h += '</div>';
+  // clima y ventanas del mes
+  const mm = m0 + 1;
+  h += '<div class="sec-title"><h2>' + MESES[m0][0].toUpperCase() + MESES[m0].slice(1) + ' en Huércal</h2></div><div class="card"><div class="temps climate" style="border:0;box-shadow:none;padding:0"><div class="temps"><div><div class="lbl">Mín. media</div><div class="big tmin">' + num1(CLIMA.tmin[m0]) + '°</div></div><div><div class="lbl">Máx. media</div><div class="big tmax">' + num1(CLIMA.tmax[m0]) + '°</div></div></div></div><p class="small" style="margin-top:6px">' + esc(CLIMA.notas[m0]) + '</p><p class="small muted" style="margin-top:6px">' + esc(CLIMA.ref) + '</p></div>';
+  const wins = { s: [], p: [], c: [], o: [] };
+  for (const c of CAT) {
+    if (c.sw && c.sw.includes(mm)) wins.s.push(c.n);
+    if (c.pl && c.pl.includes(mm)) wins.p.push(c.n);
+    if (c.h && c.h.length && c.h.length < 12 && c.h.includes(mm)) wins.c.push(c.n);
+  }
+  const blk = (t, a) => a.length ? '<div style="margin-top:10px"><b>' + t + '</b><div class="row wrap" style="margin-top:4px">' + a.map(n => '<span class="chip">' + esc(n) + '</span>').join('') + '</div></div>' : '';
+  h += '<div class="sec-title"><h2>Qué toca este mes (catálogo)</h2></div><div class="card">' + (blk('Sembrar', wins.s) + blk('Plantar / comprar plantel', wins.p) + blk('Cosechar', wins.c) || '<span class="muted small">Sin ventanas destacadas.</span>') + '</div>';
+  h += '<div class="row wrap" style="margin-top:16px"><button class="btn sec" data-act="ics">' + ic('bell').replace('<svg', '<svg width="16" height="16" style="vertical-align:-3px"') + ' Avisos en el calendario del móvil (.ics)</button></div>';
+  return h;
+}
+
+/* CATÁLOGO */
+function catList() {
+  const q = view.q.trim().toLowerCase();
+  const strip = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const qq = strip(q);
+  const arr = CAT.filter(c => (!view.g || c.g === view.g) && (!view.fit || (view.fit === 'ok' ? FIT[c.fit].k >= 2 : c.fit === view.fit)) && (!qq || strip(c.n + ' ' + c.s).includes(qq)));
+  if (!arr.length) return '<div class="empty">Sin resultados.</div>';
+  return '<div class="stack s8">' + arr.map(c => {
+    const mine = S.plants.some(p => p.cat === c.id);
+    return '<button class="card tap pcard" data-act="plant-info" data-id="' + c.id + '" style="--gc:' + GROUPS[c.g].c + '"><span class="ico">' + ic(GROUPS[c.g].ic) + '</span><span class="grow"><span class="nm">' + esc(c.n) + '</span><br><span class="sub"><i>' + esc(c.s) + '</i></span></span><span class="chip fit' + FIT[c.fit].k + '">' + FIT[c.fit].n + (mine ? ' ✓' : '') + '</span></button>';
+  }).join('') + '</div>';
+}
+function vCat() {
+  let h = '<div class="top"><div><div class="kicker">Catálogo · ' + CAT.length + ' plantas</div><h1>Elegir plantas</h1></div></div>';
+  h += '<input id="q" type="search" placeholder="Buscar: lima, shiso, aloe…" value="' + esc(view.q) + '" aria-label="Buscar planta" autocomplete="off">';
+  h += '<div class="seg" style="margin:10px 0 6px"><button class="chip' + (!view.g ? ' on' : '') + '" data-act="catg" data-g="">Todas</button>' + Object.keys(GROUPS).map(g => '<button class="chip' + (view.g === g ? ' on' : '') + '" data-act="catg" data-g="' + g + '">' + GROUPS[g].n + '</button>').join('') + '</div>';
+  h += '<div class="seg" style="margin-bottom:12px"><button class="chip' + (!view.fit ? ' on' : '') + '" data-act="catf" data-f="">Cualquier encaje</button><button class="chip' + (view.fit === 'ok' ? ' on' : '') + '" data-act="catf" data-f="ok">Encajan bien</button><button class="chip' + (view.fit === 'cuidados' ? ' on' : '') + '" data-act="catf" data-f="cuidados">Piden cuidados</button></div>';
+  h += '<p class="small muted" style="margin-bottom:10px">«Encaje» es una valoración propia a partir del clima de la zona (sin heladas, verano caluroso y seco, unos 200 mm de lluvia al año), no un dato publicado.</p>';
+  h += '<div id="catlist">' + catList() + '</div>';
+  return h;
+}
+
+/* MÁS */
+function vMas() {
+  if (view.sub) return vSub();
+  const pend = S.rem.filter(r => !r.done).length, sh = S.shop.filter(x => !x.done).length;
+  let h = '<div class="top"><div><div class="kicker">Terraza de Huércal</div><h1>Más</h1></div></div><div class="menu">';
+  h += mi('bell', 'Mis recordatorios', pend + ' activos', 'rem') + mi('bag', 'Lista de compra', sh + ' pendientes', 'shop') + mi('store', 'Dónde comprar', 'Semillas y plantones', 'buy') + mi('cal', 'Avisos en el móvil', 'Exportar al calendario (.ics)', 'ics') + mi('save', 'Copia de seguridad', 'Exportar e importar tus datos', 'data') + mi('info', 'Fuentes y límites', 'De dónde salen los datos', 'about');
+  h += '</div><div class="sec-title"><h2>Aspecto</h2></div><div class="seg">' + [['auto', 'Automático'], ['light', 'Claro'], ['dark', 'Oscuro']].map(([v, n]) => '<button class="chip' + (S.theme === v ? ' on' : '') + '" data-act="theme" data-v="' + v + '">' + n + '</button>').join('') + '</div>';
+  return h;
+}
+function mi(icn, t, s, sub) { return '<button data-act="sub" data-sub="' + sub + '">' + ic(icn) + '<span><b>' + t + '</b><br><span class="small muted">' + s + '</span></span><span class="muted">›</span></button>'; }
+function vSub() {
+  const back = '<button class="back" data-act="sub" data-sub="">' + ic('back').replace('<svg', '<svg width="18" height="18"') + ' Más</button>';
+  const s = view.sub;
+  if (s === 'rem') {
+    const act = S.rem.filter(r => !r.done).sort((a, b) => a.date.localeCompare(b.date)), dn = S.rem.filter(r => r.done);
+    return back + '<div class="top"><h1>Recordatorios</h1><button class="btn" data-act="rem-new">' + ic('plus').replace('<svg', '<svg width="18" height="18" style="vertical-align:-3px"') + ' Nuevo</button></div>' +
+      (act.length ? '<div class="stack s8">' + act.map(r => remRow(r)).join('') + '</div>' : '<div class="empty">No tienes recordatorios propios.<br><span class="small">Crea uno para lo que la app no sabe: abonar con un producto concreto, cambiar el goteo, revisar un esqueje…</span></div>') +
+      (dn.length ? '<div class="sec-title"><h2>Hechos</h2><button class="btn sm ghost" data-act="rem-clear">Vaciar</button></div><div class="stack s8">' + dn.map(r => remRow(r, true)).join('') + '</div>' : '');
+  }
+  if (s === 'shop') {
+    return back + '<div class="top"><h1>Lista de compra</h1></div><form id="f-shop" class="row"><input id="s-t" placeholder="Qué comprar (ej.: abono para cítricos)" aria-label="Qué comprar" required><button class="btn" type="submit">Añadir</button></form><div class="card" style="margin-top:12px">' +
+      (S.shop.length ? S.shop.map(x => '<div class="shop"><input type="checkbox" data-act="shop-tick" data-id="' + x.id + '"' + (x.done ? ' checked' : '') + ' aria-label="Marcar"><span class="' + (x.done ? 'done' : '') + '">' + esc(x.t) + '</span><button class="btn sm ghost" data-act="shop-del" data-id="' + x.id + '" aria-label="Borrar">' + ic('trash').replace('<svg', '<svg width="14" height="14"') + '</button></div>').join('') : '<span class="muted small">Vacía. Desde la ficha de cualquier planta puedes añadirla aquí.</span>') + '</div>' +
+      (S.shop.some(x => x.done) ? '<button class="btn sm ghost" style="margin-top:10px" data-act="shop-clear">Quitar las marcadas</button>' : '');
+  }
+  if (s === 'buy') return back + vBuy();
+  if (s === 'data') return back + vData();
+  if (s === 'about') return back + vAbout();
+  return '';
+}
+function remRow(r, done) {
+  const p = r.puid && S.plants.find(x => x.uid === r.puid);
+  return '<div class="card"><div class="row"><div class="grow"><div class="' + (done ? 'done' : '') + '"><b>' + esc(r.title) + '</b></div><div class="small muted">' + fmtShort(r.date) + (r.rep ? ' · ' + (r.rep === 'm' ? 'cada mes' : 'cada ' + r.rep + ' d') : '') + (p ? ' · ' + esc(p.nick) : '') + (r.notes ? ' · ' + esc(r.notes) : '') + '</div></div>' +
+    (done ? '' : '<button class="btn sm sec" data-act="rem-edit" data-id="' + r.id + '" aria-label="Editar">' + ic('edit').replace('<svg', '<svg width="14" height="14"') + '</button>') + '<button class="btn sm ghost" data-act="rem-del" data-id="' + r.id + '" aria-label="Borrar">' + ic('trash').replace('<svg', '<svg width="14" height="14"') + '</button></div></div>';
+}
+function remSheet(id, dateStr) {
+  const r = id ? S.rem.find(x => x.id === id) : null;
+  let h = shHead(r ? 'Editar recordatorio' : 'Nuevo recordatorio');
+  const repV = r ? (r.rep === 'm' ? 'm' : r.rep ? 'n' : '0') : '0';
+  h += '<form id="f-rem" data-id="' + (r ? r.id : '') + '"><label for="r-t">Qué quieres recordar</label><input id="r-t" required value="' + esc(r ? r.title : '') + '" placeholder="Ej.: abonar el limonero con hierro quelado">' +
+    '<label for="r-p">Planta (opcional)</label><select id="r-p"><option value="">Ninguna</option>' + S.plants.map(p => '<option value="' + p.uid + '"' + (r && r.puid === p.uid ? ' selected' : '') + '>' + esc(p.nick) + '</option>').join('') + '</select>' +
+    '<label for="r-d">Fecha</label><input id="r-d" type="date" required value="' + (r ? r.date : (dateStr || iso(today0()))) + '">' +
+    '<label for="r-r">Repetir</label><select id="r-r"><option value="0"' + (repV === '0' ? ' selected' : '') + '>No se repite</option><option value="n"' + (repV === 'n' ? ' selected' : '') + '>Cada N días</option><option value="m"' + (repV === 'm' ? ' selected' : '') + '>Cada mes</option></select>' +
+    '<div id="r-nw"' + (repV === 'n' ? '' : ' hidden') + '><label for="r-n">Cada cuántos días</label><input id="r-n" type="number" min="1" max="365" inputmode="numeric" value="' + (r && typeof r.rep === 'number' ? r.rep : 7) + '"></div>' +
+    '<label for="r-nt">Nota</label><input id="r-nt" value="' + esc(r ? r.notes : '') + '" placeholder="Opcional">' +
+    '<div class="row" style="margin-top:16px"><button class="btn grow" type="submit">Guardar</button></div></form>';
+  sheet(h);
+}
+function vBuy() {
+  return '<div class="top"><h1>Dónde comprar</h1></div>' +
+    '<div class="note" style="margin-bottom:12px">Lo que sigue lo he comprobado en las webs o en la prensa. <b>No he comprobado stock ni envíos a España</b>: confírmalo antes de pedir.</div>' +
+    '<div class="stack">' +
+    buyCard('Semillas de chiles y pimientos', [
+      ['ChiliPlanet (Dénia, Alicante)', 'Empresa que cultiva y vende semillas de chiles y pimientos picantes. Referencia: reportaje de AlicantePlaza.', 'https://alicanteplaza.es/alicanteplaza/la-firma-chiliplanet-un-nuevo-negocio-que-cultiva-semillas-de-chiles-y-pimientos-desde-denia'],
+      ['Planeta Huerto (Alicante)', 'Tienda española de huerto: semillas y material.', 'https://www.planetahuerto.es'],
+      ['PepperSeeds.eu', 'Semillas de chile, entre ellas Thai Dragon, en euros.', 'https://pepperseeds.eu'],
+      ['Pepper Joe’s (EE. UU.)', 'Vende plantas vivas de ají amarillo. Envío a España no verificado.', 'https://pepperjoe.com/es/products/aji-amarillo-live-plants']
+    ]) +
+    buyCard('Aromáticas exóticas', [
+      ['Rare Palm Seeds', 'Semillas de culantro (Eryngium foetidum). Revisa pedido mínimo y gastos de envío.', 'https://www.rarepalmseeds.com/eryngium-foetidum'],
+      ['Kokopelli (Francia)', 'Semillas libres y reproducibles; tienen, por ejemplo, albahaca peruana. Revisa su catálogo para otras hierbas.', 'https://kokopelli-semences.fr']
+    ]) +
+    '<div class="card"><h3>Rutas sin proveedor verificado</h3><ul class="plain small" style="margin-top:6px"><li><b>Shiso, huacatay, epazote, hoja de curry, lima kaffir, yuzu, cilantro vietnamita:</b> no he podido verificar un proveedor concreto en España. Busca semillas o plantel en tiendas especializadas en hierbas del mundo y pregunta antes por la variedad exacta.</li><li><b>Hierba limón, jengibre, cúrcuma y cilantro vietnamita:</b> en tiendas asiáticas o ecológicas se encuentran tallos y rizomas frescos que se pueden enraizar o plantar (técnica habitual de cultivo, no una oferta concreta).</li><li><b>Cítricos, romero, tomillo, laurel…:</b> viveros y garden centers de la zona de Almería. No he verificado cuáles tienen cítricos poco comunes; llama antes.</li></ul></div>' +
+    '</div>';
+}
+function buyCard(t, rows) {
+  return '<div class="card"><h3>' + t + '</h3>' + rows.map(r => '<div style="margin-top:10px"><b>' + esc(r[0]) + '</b><div class="small muted">' + esc(r[1]) + '</div><a class="small" href="' + esc(r[2]) + '" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">' + esc(r[2].replace(/^https?:\/\//, '').replace(/^www\./, '').slice(0, 56)) + '</a></div>').join('') + '</div>';
+}
+function vData() {
+  return '<div class="top"><h1>Copia de seguridad</h1></div><div class="card stack"><p class="small">Tus datos viven solo en este navegador. Si cambias de móvil o borras los datos del navegador, se pierden. Guarda una copia de vez en cuando.</p><div class="row wrap"><button class="btn" data-act="export">Exportar</button><button class="btn sec" data-act="import">Importar</button><button class="btn ghost danger" style="color:var(--warn)" data-act="reset">Empezar de cero</button></div></div>';
+}
+function vAbout() {
+  return '<div class="top"><h1>Fuentes y límites</h1></div><div class="stack">' +
+    '<div class="card"><h3>Clima</h3><p class="small" style="margin-top:6px">' + esc(CLIMA.ref) + ' Medias de mínima y máxima por mes, 0 días de helada de media y unos 200 mm de lluvia al año.</p></div>' +
+    '<div class="card"><h3>Pautas de cultivo</h3><p class="small" style="margin-top:6px">Cada ficha indica si su dato viene de la guía (RHS, BCSS, UF/IFAS, Mississippi State University, MITECO, AEMET) o si es una <b>pauta general</b> sin dato publicado para Huércal. Las valoraciones de «encaje» son propias.</p></div>' +
+    '<div class="card"><h3>Riego y avisos</h3><p class="small" style="margin-top:6px">Los intervalos son un punto de partida para macetas al sol; la app los ajusta con lo que anotas. No tiene en cuenta la lluvia ni el calor de cada día: usa «+1» para posponer y tu dedo en el sustrato para decidir.</p></div>' +
+    '<div class="card"><h3>Avisos en el móvil</h3><p class="small" style="margin-top:6px">Una página web no puede enviar avisos por sí sola al iPhone. Por eso la app genera un archivo de calendario (.ics) con las tareas de los próximos 45 días, con alarma a las 9:00. Se importa a la app Calendario del móvil.</p></div>' +
+    '<div class="card"><h3>Datos que faltan</h3><p class="small" style="margin-top:6px">No hay normales climáticas oficiales de Huércal de Almería ni datos de calidad del agua del municipio. Si el agua es dura, mide su conductividad y ajusta el lavado de sales de las macetas.</p></div></div>';
+}
+
+/* ---------- ICS ---------- */
+function icsText() {
+  const t0 = today0(), end = addDays(t0, 45), ev = project(t0, end);
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+  const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Terraza de Huercal//ES', 'CALSCALE:GREGORIAN', 'X-WR-CALNAME:Terraza de Huércal'];
+  const ics = s => String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+  Object.keys(ev).sort().forEach(k => {
+    const lines = ev[k].map(e => e.src === 'man' ? e.r.title : e.t.l + ' ' + e.p.nick);
+    const d = k.replace(/-/g, '');
+    const title = lines.length === 1 ? 'Terraza: ' + lines[0] : 'Terraza: ' + lines.length + ' tareas';
+    L.push('BEGIN:VEVENT', 'UID:' + d + '-' + uid() + '@terraza-huercal', 'DTSTAMP:' + stamp, 'DTSTART:' + d + 'T090000', 'DTEND:' + d + 'T093000', 'SUMMARY:' + ics(title), 'DESCRIPTION:' + ics(lines.join('\n')), 'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:' + ics(title), 'TRIGGER:PT0M', 'END:VALARM', 'END:VEVENT');
+  });
+  L.push('END:VCALENDAR');
+  return L.join('\r\n');
+}
+function tryDownload(name, text, type) {
+  try {
+    const b = new Blob([text], { type: type || 'text/plain' }), a = document.createElement('a');
+    a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  } catch (e) { /* bloqueado */ }
+}
+function copyText(txt, ta) {
+  const fallback = () => { if (ta) { ta.focus(); ta.select(); } toast('Selecciona y copia el texto.'); };
+  try { navigator.clipboard.writeText(txt).then(() => toast('Copiado.'), fallback); } catch (e) { fallback(); }
+}
+function icsSheet() {
+  const txt = icsText(), n = (txt.match(/BEGIN:VEVENT/g) || []).length;
+  let h = shHead('Avisos en el móvil', n + ' días con tareas en los próximos 45 días');
+  h += '<p class="small">Genera un archivo de calendario con una alarma a las 9:00 cada día que tengas tareas. En iPhone, abre el archivo descargado con Calendario. Si tu navegador no lo descarga, copia el texto y pégalo en un archivo <b>terraza.ics</b>.</p>' +
+    '<div class="row wrap" style="margin:12px 0"><button class="btn" data-act="ics-dl">Descargar .ics</button><button class="btn sec" data-act="ics-copy">Copiar texto</button></div><textarea id="ics-ta" readonly aria-label="Contenido del archivo .ics">' + esc(txt) + '</textarea>';
+  sheet(h);
+}
+function dataSheet(mode) {
+  let h;
+  if (mode === 'export') {
+    h = shHead('Exportar datos') + '<p class="small">Copia este texto y guárdalo (nota, correo…). Para recuperar tus datos, usa «Importar».</p><textarea id="d-ta" readonly aria-label="Copia de seguridad">' + esc(JSON.stringify(S)) + '</textarea><div class="row wrap" style="margin-top:10px"><button class="btn" data-act="d-copy">Copiar</button><button class="btn sec" data-act="d-dl">Descargar archivo</button></div>';
+  } else {
+    h = shHead('Importar datos') + '<p class="small">Pega aquí una copia de seguridad o elige el archivo. <b>Sustituye todos los datos actuales.</b></p><textarea id="d-ta" aria-label="Copia de seguridad a importar" placeholder="Pega aquí…"></textarea><input id="d-file" type="file" accept=".json,application/json,text/plain" style="margin-top:8px"><div class="row" style="margin-top:10px"><button class="btn grow" data-act="d-imp">Importar</button></div>';
+  }
+  sheet(h);
+}
+
+/* ---------- eventos ---------- */
+let lastUndo = null;
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-act]'); if (!t) return;
+  const a = t.dataset.act, D = t.dataset;
+  const find = id => S.plants.find(p => p.uid === id);
+  switch (a) {
+    case 'close': closeSheet(); break;
+    case 'goto': view.tab = D.tab; S.tab = view.tab; save(); render(); window.scrollTo(0, 0); break;
+    case 'plant': plantSheet(D.uid); break;
+    case 'plant-info': catSheet(D.id); break;
+    case 'add-plant': addPlantSheet(D.id); break;
+    case 'plant-edit': editPlantSheet(D.uid); break;
+    case 'plant-del': {
+      if (t.dataset.arm !== '1') { t.dataset.arm = '1'; t.textContent = '¿Seguro?'; setTimeout(() => { if (t.isConnected) { t.dataset.arm = ''; t.textContent = 'Borrar'; } }, 3500); break; }
+      S.plants = S.plants.filter(p => p.uid !== D.uid); S.rem.forEach(r => { if (r.puid === D.uid) r.puid = ''; }); save(); closeSheet(); render(); toast('Planta borrada.'); break;
+    }
+    case 'rec-done': {
+      if (D.k === 'riego') { waterFeedbackSheet(D.uid); break; }
+      const r = completeRec(D.uid, D.k); if (r) { render(); toast('Anotado: ' + (KLAB[D.k] || D.k).toLowerCase() + ' · ' + r.p.nick, () => { r.p.log.splice(r.p.log.indexOf(r.e), 1); save(); render(); }); }
+      break;
+    }
+    case 'rec-snooze': {
+      const p = find(D.uid); if (!p) break;
+      const cur = iso(addDays(today0(), 1)); S.snooze[p.uid + '|' + D.k] = cur; save(); render(); toast('Pospuesta a mañana.'); break;
+    }
+    case 'water-fb': {
+      const r = completeRec(D.uid, 'riego', { f: D.f }); closeSheet();
+      if (r) { render(); toast('Riego anotado · ' + r.p.nick); }
+      break;
+    }
+    case 'water-all': {
+      const ws = recTasks(today0()).filter(i => i.t.k === 'riego'); ws.forEach(i => completeRec(i.p.uid, 'riego'));
+      render(); toast(ws.length + ' riegos anotados.'); break;
+    }
+    case 'log-water': waterFeedbackSheet(D.uid); break;
+    case 'log-new': logSheet(D.uid); break;
+    case 'log-del': { const p = find(D.uid); if (p) { p.log.splice(Number(D.i), 1); save(); plantSheet(D.uid); render(); } break; }
+    case 'mult': {
+      const p = find(D.uid); if (!p) break;
+      if (D.v === 'up') p.mult = Math.max(0.4, Math.round((p.mult || 1) * 0.85 * 100) / 100);
+      else if (D.v === 'down') p.mult = Math.min(2.5, Math.round((p.mult || 1) * 1.2 * 100) / 100);
+      else p.mult = 1;
+      save(); plantSheet(D.uid); render(); break;
+    }
+    case 'man-done': {
+      const r = S.rem.find(x => x.id === D.id); if (!r) break;
+      const prev = { date: r.date, done: r.done };
+      if (r.rep) r.date = iso(nextRep(r, parse(r.date) < today0() ? today0() : parse(r.date))); else r.done = true;
+      save(); render(); toast('Hecho: ' + r.title, () => { r.date = prev.date; r.done = prev.done; save(); render(); }); break;
+    }
+    case 'man-snooze': { const r = S.rem.find(x => x.id === D.id); if (r) { r.date = iso(addDays(today0(), 1)); save(); render(); toast('Pospuesto a mañana.'); } break; }
+    case 'rem-new': remSheet(null, D.d); break;
+    case 'rem-edit': remSheet(D.id); break;
+    case 'rem-del': S.rem = S.rem.filter(x => x.id !== D.id); save(); render(); break;
+    case 'rem-clear': S.rem = S.rem.filter(x => !x.done); save(); render(); break;
+    case 'cal-nav': { const m = view.calMonth; view.calMonth = new Date(m.getFullYear(), m.getMonth() + Number(D.n), 1, 12); render(); break; }
+    case 'cal-today': view.calMonth = null; view.calSel = iso(today0()); render(); break;
+    case 'cal-sel': view.calSel = D.d; render(); break;
+    case 'catg': view.g = D.g; render(); break;
+    case 'catf': view.fit = D.f; render(); break;
+    case 'sub': view.sub = D.sub || null; if (D.sub === 'ics') { view.sub = null; icsSheet(); } render(); window.scrollTo(0, 0); break;
+    case 'ics': icsSheet(); break;
+    case 'ics-dl': tryDownload('terraza.ics', $('#ics-ta').value, 'text/calendar'); toast('Si no se ha descargado, usa «Copiar texto».'); break;
+    case 'ics-copy': copyText($('#ics-ta').value, $('#ics-ta')); break;
+    case 'theme': S.theme = D.v; applyTheme(); save(); render(); break;
+    case 'shop-tick': { const x = S.shop.find(i => i.id === D.id); if (x) { x.done = t.checked; save(); render(); } break; }
+    case 'shop-del': S.shop = S.shop.filter(i => i.id !== D.id); save(); render(); break;
+    case 'shop-clear': S.shop = S.shop.filter(i => !i.done); save(); render(); break;
+    case 'shop-add-cat': { const c = BYID[D.id]; S.shop.push({ id: uid(), t: c.n + ' (' + (c.g === 'picante' ? 'semillas o plantel' : 'planta o semillas') + ')', done: false }); save(); toast('Añadida a la lista de compra.'); break; }
+    case 'export': dataSheet('export'); break;
+    case 'import': dataSheet('import'); break;
+    case 'd-copy': copyText($('#d-ta').value, $('#d-ta')); break;
+    case 'd-dl': tryDownload('terraza-copia.json', $('#d-ta').value, 'application/json'); toast('Si no se ha descargado, usa «Copiar».'); break;
+    case 'd-imp': {
+      try { const o = JSON.parse($('#d-ta').value); if (!o || !Array.isArray(o.plants)) throw 0; S = o; S.rem = S.rem || []; S.shop = S.shop || []; S.snooze = S.snooze || {}; save(); applyTheme(); closeSheet(); view.sub = null; render(); toast('Datos importados.'); }
+      catch (x) { toast('El texto no es una copia válida.'); }
+      break;
+    }
+    case 'reset': {
+      if (t.dataset.arm !== '1') { t.dataset.arm = '1'; t.textContent = 'Pulsa otra vez para borrar todo'; break; }
+      S = seed(); save(); view.sub = null; render(); toast('Datos restablecidos.'); break;
+    }
+    case 'undo': if (toast.undo) { toast.undo(); toast.undo = null; const el = $('#toast'); if (el) el.remove(); } break;
+  }
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'q') { view.q = e.target.value; $('#catlist').innerHTML = catList(); }
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.id === 'r-r') $('#r-nw').hidden = t.value !== 'n';
+  if (t.id === 'l-k') $('#l-fw').hidden = t.value !== 'riego';
+  if (t.id === 'd-file' && t.files[0]) { const fr = new FileReader(); fr.onload = () => { $('#d-ta').value = String(fr.result); }; fr.readAsText(t.files[0]); }
+  if (t.dataset && t.dataset.act === 'shop-tick') { const x = S.shop.find(i => i.id === t.dataset.id); if (x) { x.done = t.checked; save(); render(); } }
+});
+document.addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target, v = id => (document.getElementById(id) || {}).value;
+  if (f.id === 'f-add') {
+    const c = BYID[f.dataset.id];
+    S.plants.push({ uid: 'p' + uid(), cat: c.id, nick: v('a-nick').trim() || c.n, added: iso(today0()), stage: v('a-stage'), potL: v('a-pot') ? Number(v('a-pot')) : null, place: v('a-place'), note: v('a-note').trim(), mult: 1, log: [] });
+    save(); closeSheet(); view.tab = 'plantas'; render(); toast(c.n + ' añadida.');
+  } else if (f.id === 'f-edit') {
+    const p = S.plants.find(x => x.uid === f.dataset.uid); if (!p) return;
+    p.nick = v('e-nick').trim() || p.nick; p.stage = v('e-stage'); p.potL = v('e-pot') ? Number(v('e-pot')) : null; p.place = v('e-place'); p.added = v('e-added') || p.added; p.note = v('e-note').trim();
+    save(); closeSheet(); render(); toast('Guardado.');
+  } else if (f.id === 'f-log') {
+    const p = S.plants.find(x => x.uid === f.dataset.uid); if (!p) return;
+    const k = v('l-k'), en = { d: v('l-d') || iso(today0()), k, n: v('l-n').trim() };
+    if (k === 'riego' && v('l-f')) { en.f = v('l-f'); calibrate(p, en.f); }
+    p.log.push(en); if (k === 'siembra' && p.stage === 'proyecto') { p.stage = 'plantada'; p.added = en.d; }
+    save(); closeSheet(); render(); toast('Anotado.');
+  } else if (f.id === 'f-rem') {
+    const rv = v('r-r'), rep = rv === 'm' ? 'm' : rv === 'n' ? Math.max(1, Number(v('r-n')) || 7) : 0;
+    const data = { title: v('r-t').trim(), puid: v('r-p'), date: v('r-d'), rep, notes: v('r-nt').trim() };
+    if (f.dataset.id) Object.assign(S.rem.find(x => x.id === f.dataset.id), data); else S.rem.push(Object.assign({ id: uid(), done: false }, data));
+    save(); closeSheet(); render(); toast('Recordatorio guardado.');
+  } else if (f.id === 'f-shop') {
+    const t = v('s-t').trim(); if (t) { S.shop.push({ id: uid(), t, done: false }); save(); render(); }
+  }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+
+/* ---------- arranque ---------- */
+function tabbar() {
+  const tabs = [['hoy', 'Hoy', 'today'], ['plantas', 'Plantas', 'plants'], ['cal', 'Calendario', 'cal'], ['cat', 'Catálogo', 'book'], ['mas', 'Más', 'more']];
+  $('#tabbar').innerHTML = '<div class="in" role="tablist">' + tabs.map(([k, n, i]) => '<button role="tab" data-act="goto" data-tab="' + k + '" data-tab-id="' + k + '" aria-selected="false">' + ic(i) + n + (k === 'hoy' ? '<span class="badge" id="bd" hidden></span>' : '') + '</button>').join('') + '</div>';
+  $('#tabbar').querySelectorAll('button').forEach(b => { b.dataset.tab = b.dataset.tabId; });
+}
+document.addEventListener('click', e => { const b = e.target.closest('#fab'); if (b) remSheet(null); });
+function boot() {
+  applyTheme(); tabbar();
+  $('#fab').innerHTML = ic('plus'); $('#fab').setAttribute('aria-label', 'Nuevo recordatorio');
+  render();
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) render(); });
+  save();
+}
+boot();
+})();
+
+</script>
+<script>if('serviceWorker' in navigator && location.protocol.startsWith('http')){navigator.serviceWorker.register('sw.js').catch(function(){});}</script>
+</body></html>

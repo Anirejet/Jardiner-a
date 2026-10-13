@@ -1,0 +1,10 @@
+TERRAZA DE HUÉRCAL · cómo publicarla como tu app de italiano
+
+1. En GitHub crea un repositorio nuevo (por ejemplo "terraza") o usa una carpeta dentro del que ya tienes.
+2. Sube estos 6 archivos tal cual: index.html, sw.js, manifest.webmanifest, icon-180.png, icon-192.png, icon-512.png.
+3. Settings → Pages → Source: "Deploy from a branch", rama main, carpeta /(root).
+4. Abre la dirección que te da GitHub Pages en el iPhone (Safari) → Compartir → "Añadir a pantalla de inicio".
+5. Ábrela una vez con conexión: después funciona sin ella.
+
+Tus datos (plantas, riegos, recordatorios) se guardan solo en ese navegador del móvil.
+Haz de vez en cuando una copia en Más → Copia de seguridad.
